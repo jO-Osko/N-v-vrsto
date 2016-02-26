@@ -1,8 +1,12 @@
-# N-v-vrsto
-Projekt N v vrsto za predmet Programiranje2
+# Projekt N v vrsto za predmet Programiranje 2
 
-Namen projekta je narediti uporabniški vmesnik za igro 4 v vrsto in umetno inteligenco, ki bo sposobna igrati tako proti uporabniku, kot sami sebi.
+## Namen projekta
+* Uporabniški vmesnik za N v vrsto v html
+* Umetna inteligenca sestavljena iz minimax algoritma z α-β rezanjem ter hevristiko za približno oceno trenutne igralne situacije
+* Delujoča spletna stran na GitHub Pages
 
-Umetna inteligenca bo uporabljala minimax algoritem, z α-β pruning in hevristiko, ki bo ocenila smiselnost nadaljevanja poteze v tem poddrevesu.
+## Programski jeziki ter orodja
+* javascript
+* html
 
-Igrica bo napisana v javascriptu, uporabniški vmesnik pa bo v html.
+url naslov igre:
