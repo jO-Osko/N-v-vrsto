@@ -1,4 +1,6 @@
 # Projekt N v vrsto za predmet Programiranje 2
+## Opis igre
+* Igra se enako kot klasični 4 v vrto le da igra poteka na poljubnem K x L poljem kjer je potrebno zbrati N kroglic v vrsto (vrstica, stolpec, ali diagonala)
 
 ## Namen projekta
 * Uporabniški vmesnik za N v vrsto v html
