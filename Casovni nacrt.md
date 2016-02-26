@@ -1,10 +1,10 @@
-# Nacrt za projekt N v vrsto
+# Načrt za projekt N v vrsto
 
 ## 1. in 2.teden
-* Izdelava osnovnega uporabniškega vmesnika, ter dodajanje možnosti igranja igralc proti igralcu
+* Izdelava osnovnega uporabniškega vmesnika, ter dodajanje možnosti igranja igralec proti igralcu
 
 ## 3. teden
-* Izdelava osnovne umetne inteligence, minimax + alpha-beta rezanje
+* Izdelava osnovne umetne inteligence, minimax + α-β rezanje
 * Dodajanje igre na github pages
 
 ## 4. teden
