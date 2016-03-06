@@ -1,0 +1,58 @@
+body{
+    background-color:#8888FF;
+}
+
+.tabela-kazalcev{
+    margin:auto;
+    border-collapse: collapse;
+}
+
+.neveljavna{
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+}
+
+.tabela-kazalcev th, .tabela-kazalcev table, .tabela-kazalcev td{
+    border: solid 1px transparent;
+    border-collapse: collapse;
+}
+
+.igralna-plosca{
+    background-color: orange;
+    margin:auto;
+    border-collapse: collapse;
+}
+
+
+.igralna-plosca th, .igralna-plosca table, .igralna-plosca td{
+    border: solid 1px;
+    border-collapse: collapse;
+}
+
+.igralna-vrstica{
+}
+
+.igralna-celica{
+    width: 60px;
+    height: 60px;
+    padding: 10px;
+}
+
+.igralna-celica span{
+    display: block;
+    height: 100%;
+    width: 100%;
+    border-radius: 100%;
+}
+
+.igralna-celica .modra{
+    background-color: blue;
+}
+
+.igralna-celica .bela{
+    background-color: white;
+}
+
+.igralna-celica .rdeca{
+    background-color: red;
+}
