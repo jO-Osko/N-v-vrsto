@@ -11,4 +11,4 @@
 * javascript
 * html
 
-url naslov igre:
+url naslov igre: [N-v-vrsto](http://jo-osko.github.io/N-v-vrsto/ "N-v-vrsto")
