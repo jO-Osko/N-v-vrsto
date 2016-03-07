@@ -10,7 +10,7 @@ function naredi_plosco(sirina, visina, v_vrsto){
         mreza.push(temp);
     }
 
-    var tabela_kazalcev = $("<table>", {class:"tabela-kazalcev", id:"tabela-kazalcev"});
+    var tabela_kazalcev = $("<table>", {class:"tabela-kazalcev", id:"plosca-kazalcev"});
     var html_kazalci = $("<tr>", {class:"html-kazalci"});
     tabela_kazalcev.append(html_kazalci);
     var kazalci = [];
