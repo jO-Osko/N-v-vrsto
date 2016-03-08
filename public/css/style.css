@@ -3,7 +3,6 @@ body{
 }
 
 .tabela-kazalcev{
-    margin:auto;
     border-collapse: collapse;
 }
 
@@ -17,9 +16,13 @@ body{
     border-collapse: collapse;
 }
 
+#glavna-plosca{
+    margin:auto;
+    display: table;
+}
+
 .igralna-plosca{
     background-color: orange;
-    margin:auto;
     border-collapse: collapse;
 }
 
@@ -55,4 +58,8 @@ body{
 
 .igralna-celica .rdeca{
     background-color: red;
+}
+
+.platno-pocez{
+    position: absolute;
 }

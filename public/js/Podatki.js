@@ -30,3 +30,22 @@ function Poteza(vrstica, stolpec, igralec){
     this.igralec =  igralec;
 
 }
+
+function Zmaga(x_1, y_1, x_2, y_2){
+    this.zacetek = new Tocka(x_1, y_1);
+    this.konec = new Tocka(x_2, y_2);
+}
+
+function Tocka(x,y){
+    this.x = x;
+    this.y = y;
+}
+
+function Nastavitve(visina_celice, sirina_celice, obloga /*padding*/, meja){
+    this.visina_celice = visina_celice || 60;
+    this.sirina_celice = sirina_celice || 60;
+    this.obloga = obloga || 10;
+    this.meja = meja || 1;
+    this.polna_sirina_celice = this.sirina_celice + 2 * this.obloga + this.meja;
+    this.polna_visina_celice = this.visina_celice + 2 * this.obloga + this.meja;
+}

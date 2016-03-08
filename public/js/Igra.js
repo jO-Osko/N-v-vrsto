@@ -34,8 +34,7 @@ KazalcnaCelica.prototype.skrij_potezo = function (){
 };
 
 
-function Igra(html_mreza, kazalci, visina, sirina, v_vrsto) {
-
+function Igra(html_mreza, kazalci, visina, sirina, v_vrsto, nastavitve) {
 
     this.html_mreza = html_mreza;
     this.kazalci = kazalci;
@@ -45,7 +44,7 @@ function Igra(html_mreza, kazalci, visina, sirina, v_vrsto) {
     this.visina = visina;
     this.sirina = sirina;
     this.v_vrsto = v_vrsto;
-
+    this.nastavitve = nastavitve;
 }
 
 
@@ -77,6 +76,13 @@ Igra.prototype.opravi_potezo = function(vrstica, stolpec){
     var poteza = new Poteza(vrstica, stolpec, this.na_potezi);
     this.poteze.push(poteza);
     this.html_mreza[stolpec][vrstica].odigraj_potezo(this.na_potezi);
+
+    var zmaga = this.preveri_zmago(stolpec, vrstica);
+    if(zmaga !== null){
+        this.koncano = STANJE.KONCANO;
+        this.narisi_zmago(zmaga)
+    }
+
     this.zamenjaj_igralca();
 
 };
@@ -113,3 +119,105 @@ Igra.prototype.skrij_potezo = function(stolpec){
     this.kazalci[stolpec].skrij_potezo();
 };
 
+Igra.prototype.preveri_zmago = function(stolpec, vrstica){
+    var igralec = this.html_mreza[stolpec][vrstica].igralec;
+    return(
+        this.preveri_zmago_vertikalno(stolpec, vrstica, igralec) ||
+
+        this.preveri_zmago_horizontalno(stolpec, vrstica, igralec)  ||
+
+        this.preveri_zmago_anti_diagonalno(stolpec, vrstica, igralec) ||
+
+        this.preveri_zmago_diagonalno(stolpec, vrstica, igralec)
+    );
+};
+
+/**
+ * Deluje na isti nacin kot Gasperjeva koda, samo da ta potrebuje tudi kje tocno je bila dosezena zmaga.
+ * @param {Number} stolpec
+ * @param {Number} vrstica
+ * @param {Igralec} igralec
+ * @return {Zmaga} Nacin zmage
+ */
+Igra.prototype.preveri_zmago_vertikalno = function(stolpec, vrstica, igralec){
+    // gor-dol
+    var sprememba_visine = 1;
+    for(var dy_gor = 1; (vrstica - dy_gor >= 0) && (this.html_mreza[stolpec][vrstica - dy_gor].igralec == igralec) && ++sprememba_visine; ++dy_gor){} // Doda 1 prevec
+    for(var dy_dol = 1; (vrstica + dy_dol < this.visina) && (this.html_mreza[stolpec][vrstica + dy_dol].igralec == igralec) && ++sprememba_visine; ++dy_dol){} // Doda 1 prevec
+    if(sprememba_visine >= this.v_vrsto){
+                      // stolpec ostane enak
+        return new Zmaga(stolpec, vrstica - (dy_gor - 1),
+                         stolpec, vrstica + (dy_dol - 1) );
+    }
+    return null;
+};
+
+Igra.prototype.preveri_zmago_horizontalno = function(stolpec, vrstica, igralec){
+    // levo-desno
+    var sprememba_sirine = 1;
+    for(var dx_levo = 1; (stolpec - dx_levo >= 0) && (this.html_mreza[stolpec - dx_levo][vrstica].igralec == igralec) && ++sprememba_sirine; ++dx_levo){} // Doda 1 prevec
+    for(var dx_desno = 1; (stolpec + dx_desno < this.html_mreza.length) && (this.html_mreza[stolpec + dx_desno][vrstica].igralec == igralec) && ++sprememba_sirine; ++dx_desno){} // Doda 1 prevec
+    if(sprememba_sirine >= this.v_vrsto){
+                                               // vrstica ostane enaka
+        return new Zmaga(stolpec - (dx_levo - 1),  vrstica,
+                         stolpec + (dx_desno - 1), vrstica);
+
+    }
+    return null;
+};
+
+Igra.prototype.preveri_zmago_anti_diagonalno = function (stolpec, vrstica, igralec) {
+    // dol-levo, gor-desno
+    var sprememba_antidiagonalno = 1;
+    for(var dx_dol_levo = 1; (stolpec - dx_dol_levo >= 0) && (vrstica + dx_dol_levo < this.html_mreza[stolpec].length) && (this.html_mreza[stolpec - dx_dol_levo][vrstica + dx_dol_levo].igralec == igralec) && ++sprememba_antidiagonalno; ++dx_dol_levo){} // ads one too much
+    for(var dx_gor_desno = 1; (stolpec + dx_gor_desno < this.html_mreza.length) && (vrstica - dx_gor_desno >= 0) && (this.html_mreza[stolpec + dx_gor_desno][vrstica - dx_gor_desno].igralec == igralec) && ++sprememba_antidiagonalno; ++dx_gor_desno){} // ads one too much
+    if(sprememba_antidiagonalno >= this.v_vrsto){
+        return new Zmaga(stolpec - (dx_dol_levo - 1),  vrstica + (dx_dol_levo - 1),
+                         stolpec + (dx_gor_desno - 1), vrstica - (dx_gor_desno - 1));
+    }
+    return null;
+};
+
+Igra.prototype.preveri_zmago_diagonalno = function (stolpec, vrstica, igralec) {
+    // gor-levo, dol-desno
+    var sprememba_diagonalno = 1;
+    for(var dx_gor_levo = 1; (stolpec - dx_gor_levo >= 0) && (vrstica - dx_gor_levo >= 0) && (this.html_mreza[stolpec - dx_gor_levo][vrstica - dx_gor_levo].igralec == igralec) && ++sprememba_diagonalno; ++dx_gor_levo){} // ads one too much
+    for(var dx_dol_desno = 1; (stolpec + dx_dol_desno < this.html_mreza.length) && (vrstica + dx_dol_desno < this.html_mreza[stolpec].length) && (this.html_mreza[stolpec + dx_dol_desno][vrstica + dx_dol_desno].igralec == igralec) && ++sprememba_diagonalno; ++dx_dol_desno){} // ads one too much
+    if(sprememba_diagonalno >= this.v_vrsto){
+        return new Zmaga(stolpec - (dx_gor_levo - 1),  vrstica - (dx_gor_levo - 1),
+                         stolpec + (dx_dol_desno - 1), vrstica + (dx_dol_desno - 1));
+    }
+    return null;
+};
+
+Igra.prototype.dobi_kordinate_centra_celice = function (tocka) {
+    var x = tocka.x * this.nastavitve.polna_sirina_celice + this.nastavitve.polna_sirina_celice * 0.5;
+    var y = tocka.y * this.nastavitve.polna_visina_celice + this.nastavitve.polna_visina_celice * 0.5;
+    return [x,y];
+};
+
+Igra.prototype.narisi_zmago = function(zmaga){
+    var glavna_plosca = $("#glavna-igralna-plosca");
+    var visina_tabele = glavna_plosca.outerHeight();
+    var sirina_tabele = glavna_plosca.outerWidth();
+    var canvas = $("<canvas>", {class:"platno-pocez", id:"zmagovalno-platno"});
+
+    $("#plosca-kazalcev").after(canvas);
+
+    canvas.prop("height", visina_tabele);
+    canvas.prop("width", sirina_tabele);
+    var context = document.getElementById("zmagovalno-platno").getContext("2d");
+    if(!context){
+        return; // Ne podpiramo :(
+    }
+    context.lineWidth = 5;
+    context.strokeStyle = '#FF88FF';
+
+    context.beginPath();
+    var start = this.dobi_kordinate_centra_celice(zmaga.zacetek);
+    context.moveTo(start[0], start[1]);
+
+    var end = this.dobi_kordinate_centra_celice(zmaga.konec);
+    context.lineTo(end[0], end[1]);
+    context.stroke();
+};

@@ -68,6 +68,6 @@ function naredi_plosco(sirina, visina, v_vrsto){
     $("#plosca-kazalcev").replaceWith(tabela_kazalcev);
     $("#glavna-igralna-plosca").replaceWith(html_igralna_plosca);
 
-    var glavna_igralna_plosca = new Igra(mreza, kazalci, visina, sirina, v_vrsto);
+    var glavna_igralna_plosca = new Igra(mreza, kazalci, visina, sirina, v_vrsto, new Nastavitve(60,60));
 
 }
