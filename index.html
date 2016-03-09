@@ -25,8 +25,21 @@
   </div>
 
 </div>
+
+<div id="restart_box">
+  <h2>Ponovno igraj</h2>
+  <button id="restart-game-button" type="button"  class="btn btn-default">Restart game</button>
+</div>
+
 <script>
-  naredi_plosco(10, 7, 4);
+  $("#restart-game-button").click(
+    function restart_game(){
+    //var context = document.getElementById("zmagovalno-platno").getContext("2d");
+    //var canvas = $("<canvas>", {class:"platno-pocez", id:"zmagovalno-platno"});
+    //context.clearRect(0,0, canvas.width, canvas.height);
+    naredi_plosco(10, 7, 4);
+    });
+  naredi_plosco(10,7,4);
 </script>
 </body>
 
