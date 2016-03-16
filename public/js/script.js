@@ -67,6 +67,20 @@ function naredi_plosco(sirina, visina, v_vrsto){
 
     $("#plosca-kazalcev").replaceWith(tabela_kazalcev);
     $("#glavna-igralna-plosca").replaceWith(html_igralna_plosca);
+    $("#igraj-AI").click(
+    function(){
+        if(glavna_igralna_plosca.na_potezi == IGRALCI.RACUNALNIK){
+            var ai = new AI(0);
+            console.log(glavna_igralna_plosca.html_mreza);
+            var ai_poteza = ai.najdi_potezo(glavna_igralna_plosca.kopija_igre());
+            glavna_igralna_plosca.igraj(ai_poteza);
+            }
+        else{
+            alert("nisi na potezi");
+        }
+
+
+    })
 
     var glavna_igralna_plosca = new Igra(mreza, kazalci, visina, sirina, v_vrsto, new Nastavitve(60,60));
 

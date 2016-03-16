@@ -132,6 +132,7 @@ Igra.prototype.preveri_zmago = function(stolpec, vrstica){
     );
 };
 
+
 /**
  * Deluje na isti nacin kot Gasperjeva koda, samo da ta potrebuje tudi kje tocno je bila dosezena zmaga.
  * @param {Number} stolpec
@@ -221,3 +222,14 @@ Igra.prototype.narisi_zmago = function(zmaga){
     context.lineTo(end[0], end[1]);
     context.stroke();
 };
+
+Igra.prototype.kopija_igre = function(){
+    var nova_mreza = [];
+    for(var i=0; i<this.html_mreza.length;i++){
+        nova_mreza.push(this.html_mreza[i].slice(0));
+    }
+    kopija = new Igra(nova_mreza, null, this.visina, this.sirina, this.v_vrsto, this.nastavitve);
+    kopija.na_potezi = this.na_potezi;
+
+    return kopija;
+}
