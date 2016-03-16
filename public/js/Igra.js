@@ -232,4 +232,13 @@ Igra.prototype.kopija_igre = function(){
     kopija.na_potezi = this.na_potezi;
 
     return kopija;
-}
+};
+
+Igra.prototype.poteza_nazaj = function(){
+    var zadnja = this.poteze.pop();
+    this.na_potezi = zadnja.igralec;
+    //TODO: pobrisat je treba še html_mrežo
+    //na poziciji zadnja.vrstica, zadnja.stolpec
+
+    this.koncano = STANJE.NE_KONCANO; //ne mormo igrt po tem k je enkrat že konc
+};
