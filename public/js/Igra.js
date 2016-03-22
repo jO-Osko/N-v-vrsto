@@ -45,6 +45,7 @@ function Igra(html_mreza, kazalci, visina, sirina, v_vrsto, nastavitve) {
     this.sirina = sirina;
     this.v_vrsto = v_vrsto;
     this.nastavitve = nastavitve;
+    
 }
 
 
@@ -90,6 +91,7 @@ Igra.prototype.opravi_potezo = function(vrstica, stolpec){
 
 Igra.prototype.igraj = function(stolpec){
     try{
+        //console.log("poteza", stolpec);
         var vrstica = this.izracunaj_potezo(stolpec);
         this.opravi_potezo(vrstica, stolpec);
     }
@@ -120,7 +122,7 @@ Igra.prototype.skrij_potezo = function(stolpec){
 };
 
 Igra.prototype.preveri_zmago = function(stolpec, vrstica){
-    var igralec = this.html_mreza[stolpec][vrstica].igralec;
+    var igralec = this.html_mreza[stolpec][vrstica].igralec;    
     return(
         this.preveri_zmago_vertikalno(stolpec, vrstica, igralec) ||
 
@@ -224,9 +226,9 @@ Igra.prototype.narisi_zmago = function(zmaga){
 };
 
 Igra.prototype.kopija_igre = function(){
-    var nova_mreza = [];
+    var nova_mreza = [];    
     for(var i=0; i<this.html_mreza.length;i++){
-        nova_mreza.push(this.html_mreza[i].slice(0));
+        nova_mreza.push(this.html_mreza[i].slice());
     }
     kopija = new Igra(nova_mreza, null, this.visina, this.sirina, this.v_vrsto, this.nastavitve);
     kopija.na_potezi = this.na_potezi;
