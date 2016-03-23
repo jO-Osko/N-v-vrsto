@@ -228,19 +228,20 @@ Igra.prototype.narisi_zmago = function(zmaga){
 Igra.prototype.kopija_igre = function(){
     var nova_mreza = [];    
     for(var i=0; i<this.html_mreza.length;i++){
-        nova_mreza.push(this.html_mreza[i].slice());
+        var temp = [];
+        nova_mreza.push(temp);
+        for(var j = 0; j < this.html_mreza[i].length; j++){
+            temp.push(this.html_mreza[i][j].igralec);
+        }
     }
-    kopija = new Igra(nova_mreza, null, this.visina, this.sirina, this.v_vrsto, this.nastavitve);
-    kopija.na_potezi = this.na_potezi;
-
-    return kopija;
+    return nova_mreza;
 };
 
 Igra.prototype.poteza_nazaj = function(){
     var zadnja = this.poteze.pop();
     this.na_potezi = zadnja.igralec;
-    //TODO: pobrisat je treba še html_mrežo
+    //TODO: pobrisat je treba Å¡e html_mreÅ¾o
     //na poziciji zadnja.vrstica, zadnja.stolpec
 
-    this.koncano = STANJE.NE_KONCANO; //ne mormo igrt po tem k je enkrat že konc
+    this.koncano = STANJE.NE_KONCANO; //ne mormo igrt po tem k je enkrat ï¿½e konc
 };
