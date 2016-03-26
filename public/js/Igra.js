@@ -45,9 +45,17 @@ function Igra(html_mreza, kazalci, visina, sirina, v_vrsto, nastavitve) {
     this.sirina = sirina;
     this.v_vrsto = v_vrsto;
     this.nastavitve = nastavitve;
+
+    this.AI = new AI(nastavitve.globina || 8, undefined, {visina:this.visina, sirina:this.sirina,
+        v_vrsto:this.v_vrsto, na_potezi:this.na_potezi});  // AI je v igri
     
 }
 
+Igra.prototype.najboljsa_poteza = function(){
+    var poteza = this.AI.najboljsa_poteza(true);
+
+    return poteza;
+};
 
 Igra.prototype.je_poteza_veljavna = function (stolpec) {
     if(stolpec >= this.sirina){
@@ -72,7 +80,6 @@ Igra.prototype.izracunaj_potezo = function(poteza){
 
 };
 
-
 Igra.prototype.opravi_potezo = function(vrstica, stolpec){
     var poteza = new Poteza(vrstica, stolpec, this.na_potezi);
     this.poteze.push(poteza);
@@ -88,12 +95,11 @@ Igra.prototype.opravi_potezo = function(vrstica, stolpec){
 
 };
 
-
 Igra.prototype.igraj = function(stolpec){
     try{
-        //console.log("poteza", stolpec);
         var vrstica = this.izracunaj_potezo(stolpec);
         this.opravi_potezo(vrstica, stolpec);
+        this.AI.igraj(stolpec);
     }
     catch (e){
         throw e;
@@ -111,7 +117,6 @@ Igra.prototype.zamenjaj_igralca = function(){
         this.na_potezi = IGRALCI.CLOVEK;
     }
 };
-
 
 Igra.prototype.prikazi_potezo = function(stolpec){
     this.kazalci[stolpec].prikazi_potezo(this.na_potezi, this.je_poteza_veljavna(stolpec));
@@ -133,7 +138,6 @@ Igra.prototype.preveri_zmago = function(stolpec, vrstica){
         this.preveri_zmago_diagonalno(stolpec, vrstica, igralec)
     );
 };
-
 
 /**
  * Deluje na isti nacin kot Gasperjeva koda, samo da ta potrebuje tudi kje tocno je bila dosezena zmaga.
@@ -225,18 +229,6 @@ Igra.prototype.narisi_zmago = function(zmaga){
     context.stroke();
 };
 
-Igra.prototype.kopija_igre = function(){
-    var nova_mreza = [];    
-    for(var i=0; i<this.html_mreza.length;i++){
-        var temp = [];
-        nova_mreza.push(temp);
-        for(var j = 0; j < this.html_mreza[i].length; j++){
-            temp.push(this.html_mreza[i][j].igralec);
-        }
-    }
-    return nova_mreza;
-};
-
 Igra.prototype.poteza_nazaj = function(){
     var zadnja = this.poteze.pop();
     this.na_potezi = zadnja.igralec;
@@ -244,4 +236,7 @@ Igra.prototype.poteza_nazaj = function(){
     //na poziciji zadnja.vrstica, zadnja.stolpec
 
     this.koncano = STANJE.NE_KONCANO; //ne mormo igrt po tem k je enkrat �e konc
+
+    this.AI.poteza_nazaj();
+
 };

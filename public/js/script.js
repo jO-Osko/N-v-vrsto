@@ -70,9 +70,13 @@ function naredi_plosco(sirina, visina, v_vrsto){
     $("#igraj-AI").click(
     function(){
         if(glavna_igralna_plosca.na_potezi == IGRALCI.RACUNALNIK){
-            var ai = new AI(5);
-            var ai_poteza = ai.najbolsa_poteza(glavna_igralna_plosca);
-            glavna_igralna_plosca.igraj(ai_poteza);
+
+            var poteza = glavna_igralna_plosca.najboljsa_poteza();
+
+            console.log(poteza);
+
+            glavna_igralna_plosca.igraj(poteza);
+
         }else{
             alert("nisi na potezi");
         }

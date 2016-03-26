@@ -2,22 +2,39 @@ ZMAGA = 10000;
 NESKONCNO = Number.POSITIVE_INFINITY;
 
 
-function AI(globina){
+function AI(globina, mreza, nastavitve){
     this.globina = globina;
-    this.igra = null;
-
+    this.aiMreza = new AIMreza(nastavitve.visina, nastavitve.sirina, mreza, nastavitve.v_vrsto, nastavitve.na_potezi);
 }
+
 
 function AIMreza(visina, sirina, mreza, v_vrsto, na_potezi){
     this.visina = visina;
     this.sirina = sirina;
-    this.mreza = mreza;
     this.v_vrsto = v_vrsto;
     this.poteze = [];
     this.na_potezi = na_potezi;
     this.koncano = STANJE.NE_KONCANO;
+    this.zmagovalec = undefined;
+    if(mreza === undefined){
+        this.mreza = this.naredi_mrezo();
+    }else{
+        this.mreza = mreza;
+    }
 
 }
+
+AIMreza.prototype.naredi_mrezo = function(){
+    var nova_mreza = [];
+    for(var i=0; i < this.sirina; i++){
+        var temp = [];
+        nova_mreza.push(temp);
+        for(var j = 0; j < this.visina; j++){
+            temp.push(IGRALCI.NE_ODIGRANO);
+        }
+    }
+    return nova_mreza;
+};
 
 AIMreza.prototype.veljavne_poteze = function(){
     var veljavne = [];
@@ -33,7 +50,7 @@ AIMreza.prototype.je_poteza_veljavna = function (stolpec) {
     if(stolpec >= this.sirina){
         return false;
     }
-    return this.mreza[stolpec][0] == IGRALCI.NE_ODIGRANO;
+    return this.mreza[stolpec][0] === IGRALCI.NE_ODIGRANO;
 };
 
 AIMreza.prototype.izracunaj_potezo = function(poteza){
@@ -60,7 +77,6 @@ AIMreza.prototype.opravi_potezo = function(vrstica, stolpec){
     if(zmaga){
         this.koncano = STANJE.KONCANO;
         this.zmagovalec = this.na_potezi;
-        console.log("zmaga:", this.na_potezi);
         return zmaga;
     }
 
@@ -73,8 +89,6 @@ AIMreza.prototype.igraj = function(stolpec){
         var vrstica = this.izracunaj_potezo(stolpec);
         return this.opravi_potezo(vrstica, stolpec);
     }catch(e){
-        console.log(e.stack);
-        console.log(e);
         throw e;
     }
 };
@@ -168,9 +182,10 @@ AIMreza.prototype.poteza_nazaj = function(){
     this.koncano = STANJE.NE_KONCANO; //ne mormo igrt po tem k je enkrat �e konc
 };
 
-AI.prototype.minimax = function(mreza, maksimiramo, globina){
-    if(mreza.koncano == STANJE.KONCANO){
-        var zmagovalec = mreza.poteze[mreza.poteze.length - 1].igralec;
+AI.prototype.minimax = function(maksimiramo, globina){
+
+    if(this.aiMreza.koncano == STANJE.KONCANO){
+        var zmagovalec = this.aiMreza.zmagovalec;
         if(zmagovalec == IGRALCI.CLOVEK){
             return [null, -ZMAGA];
         }
@@ -183,63 +198,62 @@ AI.prototype.minimax = function(mreza, maksimiramo, globina){
         return [null, 0];
     }
 
-    var najbolsa = null;
-
+    var najbolsa = -1;
+    var veljavne_poteze = this.aiMreza.veljavne_poteze();
+    var vrednost_najbolse = 0;
     if(maksimiramo){
-        var veljavne_poteze = mreza.veljavne_poteze();
-        var vrednost_najbolse = -NESKONCNO;
-        for(var j = 0; j < veljavne_poteze.length; ++j){
-            //console.log(j);
-            var poteza = veljavne_poteze[j];
-            if(mreza.igraj(poteza)){
+        vrednost_najbolse = -NESKONCNO;
+        for(var j = 0; j < veljavne_poteze.length; ++j) {
+            var poteza_j = veljavne_poteze[j];
+            if (this.aiMreza.igraj(poteza_j)) {
                 vrednost_najbolse = ZMAGA;
-                najbolsa = poteza;
+                najbolsa = poteza_j;
+                this.aiMreza.poteza_nazaj();
                 break;
             }
-
-            //console.log("igrano ",j);
-            var vrednost = this.minimax(mreza, !maksimiramo, globina-1)[1];
-            mreza.poteza_nazaj();
-            if (vrednost > vrednost_najbolse){
-                vrednost_najbolse = vrednost;
-                najbolsa = poteza;
+            var vrednost_max = this.minimax(!maksimiramo, globina-1)[1];
+            this.aiMreza.poteza_nazaj();
+            if (vrednost_max > vrednost_najbolse){
+                vrednost_najbolse = vrednost_max;
+                najbolsa = poteza_j;
             }
         }
 
     }else{
-        var veljavne_poteze = mreza.veljavne_poteze();
-        var vrednost_najbolse = NESKONCNO;
+        vrednost_najbolse = NESKONCNO;
         for(var i = 0; i < veljavne_poteze.length; ++i){
-            var poteza = veljavne_poteze[i];
-            if(mreza.igraj(poteza)){
+            var poteza_i = veljavne_poteze[i];
+            if(this.aiMreza.igraj(poteza_i)) {
                 vrednost_najbolse = ZMAGA;
-                najbolsa = poteza;
+                najbolsa = poteza_i;
+                this.aiMreza.poteza_nazaj();
                 break;
             }
-
-            var vrednost = this.minimax(mreza, !maksimiramo, globina-1)[1];
-            mreza.poteza_nazaj();
-            if(vrednost < vrednost_najbolse){
-                vrednost_najbolse = vrednost;
-                najbolsa = poteza;
+            var vrednost_min = this.minimax(!maksimiramo, globina-1)[1];
+            this.aiMreza.poteza_nazaj();
+            if(vrednost_min < vrednost_najbolse){
+                vrednost_najbolse = vrednost_min;
+                najbolsa = poteza_i;
             }
         }
     }
-
     return [najbolsa, vrednost_najbolse];
 
 };
 
-AI.prototype.najbolsa_poteza = function(igra){
-
-    var mreza = new AIMreza(igra.visina, igra.sirina, igra.kopija_igre(), igra.v_vrsto, igra.na_potezi);
-
-    var najbolsa_poteza = this.minimax(mreza, true, this.globina);
-
+AI.prototype.najboljsa_poteza = function() {
+    var najbolsa_poteza = this.minimax(true, this.globina);
     if(najbolsa_poteza[0] === null){
-        return mreza.najdi_potezo(); // Random
+        return this.aiMreza.najdi_potezo(); // Random
     }
     return najbolsa_poteza[0];
 
 };
 
+AI.prototype.igraj = function (stolpec) {
+    this.aiMreza.igraj(stolpec);
+};
+
+AI.prototype.poteza_nazaj = function () {
+    this.aiMreza.poteza_nazaj();
+};
