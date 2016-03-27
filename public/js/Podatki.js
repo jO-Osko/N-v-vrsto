@@ -16,7 +16,14 @@ STANJE.KONCANO = 1;
 STANJE.NE_KONCANO = -1;
 STANJE.DEFUALT = STANJE.NE_KONCANO;
 
-
+HEVRISTIKA = {};
+HEVRISTIKA.TOCKOVANJE = {};
+HEVRISTIKA.TOCKOVANJE.ZMAGA = 1000000;
+HEVRISTIKA.TOCKOVANJE.PORAZ = -HEVRISTIKA.TOCKOVANJE.ZMAGA;
+HEVRISTIKA.TOCKOVANJE.REMI = 0;
+// Negativna ocena pomeni, da raje isti rezultat igramo na manj potez
+HEVRISTIKA.TOCKOVANJE.KAZEN_NA_GLOBINO_MAX = -1;
+HEVRISTIKA.TOCKOVANJE.KAZEN_NA_GLOBINO_MIN = HEVRISTIKA.TOCKOVANJE.KAZEN_NA_GLOBINO_MAX;
 
 function NeveljavnaPoteza(sporocilo){
     this.sporocilo = sporocilo;
@@ -29,6 +36,12 @@ function Poteza(vrstica, stolpec, igralec){
     this.stolpec = stolpec;
     this.igralec =  igralec;
 
+}
+
+function OptimalnaPoteza(stolpec, ocena, igralec){
+    this.stolpec = stolpec;
+    this.ocena = ocena;
+    this.igralec = igralec;
 }
 
 function Zmaga(x_1, y_1, x_2, y_2){

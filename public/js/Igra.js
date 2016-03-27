@@ -46,15 +46,13 @@ function Igra(html_mreza, kazalci, visina, sirina, v_vrsto, nastavitve) {
     this.v_vrsto = v_vrsto;
     this.nastavitve = nastavitve;
 
-    this.AI = new AI(nastavitve.globina || 8, undefined, {visina:this.visina, sirina:this.sirina,
+    this.AI = new AI(nastavitve.globina || 6, undefined, new Hevristika(HEVRISTIKA.TOCKOVANJE), {visina:this.visina, sirina:this.sirina,
         v_vrsto:this.v_vrsto, na_potezi:this.na_potezi});  // AI je v igri
     
 }
 
 Igra.prototype.najboljsa_poteza = function(){
-    var poteza = this.AI.najboljsa_poteza(true);
-
-    return poteza;
+    return this.AI.najboljsa_poteza(this.na_potezi);
 };
 
 Igra.prototype.je_poteza_veljavna = function (stolpec) {
