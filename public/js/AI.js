@@ -297,10 +297,95 @@ AI.prototype.minimiziraj = function (globina) {
     return optimalna_poteza;
 };
 
+AI.prototype.alphabeta = function(maksimiramo, globina, alpha, beta){
+    // Veselo uporabimo dejstvo, da je javascript dinamicno tipiziran jezik, in mocno udarimo uporabnika, ki bi minmax
+    // klical na ze koncani plosci.
+    // Nasvet za uporabnika: uporabljal metodo: Ai.najboljsa_poteza, saj ti sama pove, kaj pocne.
+
+    if(this.aiMreza.koncano == STANJE.KONCANO){
+        if(this.aiMreza.zmagovalec == this.maksimizirani_igralec){
+            return new OptimalnaPoteza(null, this.hevristika.tockovanje.ZMAGA, null);
+        }else if(this.aiMreza.zmagovalec != IGRALCI.NE_ODIGRANO){
+            return new OptimalnaPoteza(null, this.hevristika.tockovanje.PORAZ, null);
+        }else{
+            return new OptimalnaPoteza(null, this.hevristika.tockovanje.REMI, null);
+        }
+    }
+
+    if(globina == 0){
+        return new OptimalnaPoteza(null, this.ocena_plosce(), null);
+    }
+
+    if(maksimiramo){
+        return this.alphabeta_maximiziraj(globina, alpha, beta)
+    }else{
+        return this.alphabeta_minimiziraj(globina, alpha, beta);
+    }
+};
+
+AI.prototype.alphabeta_maximiziraj = function (globina, alpha, beta){
+    var veljavne_poteze = this.aiMreza.veljavne_poteze();
+
+    var optimalna_poteza = new OptimalnaPoteza(null, -NESKONCNO, null);
+    for(var j = 0; j < veljavne_poteze.length; ++j) {
+        var poteza = veljavne_poteze[j];
+
+        this.aiMreza.igraj(poteza);
+
+        // Gremo v globino in ignoriramo vse razen ocene pozicije
+        var ocena_poteze = this.alphabeta(false, globina-1, alpha, beta);
+
+        ocena_poteze = ocena_poteze.ocena;
+
+        this.aiMreza.poteza_nazaj();
+
+        if(ocena_poteze > optimalna_poteza.ocena){
+            optimalna_poteza = new OptimalnaPoteza(poteza, ocena_poteze, this.aiMreza.na_potezi);
+            alpha = optimalna_poteza.ocena;
+            if(beta <= alpha){
+                break; // Obrezemo
+            }
+        }
+    }
+
+    // Kaznujmo globino na koncu, vmes nima veze (razen mogoce za obrezovanje)
+    optimalna_poteza.ocena += this.hevristika.kaznuj_globino(this.globina - globina, true);
+
+    return optimalna_poteza;
+};
+
+AI.prototype.alphabeta_minimiziraj = function (globina, alpha, beta) {
+    var veljavne_poteze = this.aiMreza.veljavne_poteze();
+    var optimalna_poteza = new OptimalnaPoteza(null, NESKONCNO, null);
+    for(var j = 0; j < veljavne_poteze.length; ++j) {
+        var poteza = veljavne_poteze[j];
+
+        this.aiMreza.igraj(poteza);
+
+        // Gremo v globino in ignoriramo vse razen ocene pozicije
+        var ocena_poteze = this.alphabeta(true, globina-1, alpha, beta).ocena;
+
+        this.aiMreza.poteza_nazaj();
+
+        if(ocena_poteze < optimalna_poteza.ocena){
+            optimalna_poteza = new OptimalnaPoteza(poteza, ocena_poteze, this.aiMreza.na_potezi);
+            beta = optimalna_poteza.ocena;
+            if(beta <= alpha){
+                break;
+            }
+        }
+
+    }
+
+    optimalna_poteza.ocena += this.hevristika.kaznuj_globino(this.globina - globina, false);
+
+    return optimalna_poteza;
+};
+
 
 AI.prototype.najboljsa_poteza = function(igralec) {
     this.maksimizirani_igralec = igralec;
-    var najbolsa_poteza = this.minimax(true, this.globina);
+    var najbolsa_poteza = this.alphabeta(true, this.globina);
     console.log("optimalna", najbolsa_poteza);
     if(najbolsa_poteza.stolpec == null){
         return this.aiMreza.najdi_potezo(); // Random

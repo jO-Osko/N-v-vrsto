@@ -46,7 +46,7 @@ function Igra(html_mreza, kazalci, visina, sirina, v_vrsto, nastavitve) {
     this.v_vrsto = v_vrsto;
     this.nastavitve = nastavitve;
 
-    this.AI = new AI(nastavitve.globina || 6, undefined, new Hevristika(HEVRISTIKA.TOCKOVANJE), {visina:this.visina, sirina:this.sirina,
+    this.AI = new AI(nastavitve.globina || 10, undefined, new Hevristika(HEVRISTIKA.TOCKOVANJE), {visina:this.visina, sirina:this.sirina,
         v_vrsto:this.v_vrsto, na_potezi:this.na_potezi});  // AI je v igri
     
 }
