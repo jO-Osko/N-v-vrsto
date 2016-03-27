@@ -249,7 +249,8 @@ AI.prototype.minimax = function(maksimiramo, globina){
 AI.prototype.maximiziraj = function (globina ){
     var veljavne_poteze = this.aiMreza.veljavne_poteze();
 
-    var optimalna_poteza = new OptimalnaPoteza(null, -NESKONCNO, null);
+    var optimalna_poteza = null;
+    var optimalna_ocena = -NESKONCNO;
     for(var j = 0; j < veljavne_poteze.length; ++j) {
         var poteza = veljavne_poteze[j];
 
@@ -262,20 +263,26 @@ AI.prototype.maximiziraj = function (globina ){
 
         this.aiMreza.poteza_nazaj();
 
-        if(ocena_poteze > optimalna_poteza.ocena){
-            optimalna_poteza = new OptimalnaPoteza(poteza, ocena_poteze, this.aiMreza.na_potezi);
+        if(ocena_poteze > optimalna_ocena){
+            optimalna_poteza = poteza;
+            optimalna_ocena = ocena_poteze;
         }
     }
 
     // Kaznujmo globino na koncu, vmes nima veze (razen mogoce za obrezovanje)
-    optimalna_poteza.ocena += this.hevristika.kaznuj_globino(this.globina - globina, true);
+
+    optimalna_poteza = new OptimalnaPoteza(optimalna_poteza, optimalna_ocena +
+        this.hevristika.kaznuj_globino(this.globina - globina, true), this.aiMreza.na_potezi);
 
     return optimalna_poteza;
 };
 
 AI.prototype.minimiziraj = function (globina) {
     var veljavne_poteze = this.aiMreza.veljavne_poteze();
-    var optimalna_poteza = new OptimalnaPoteza(null, NESKONCNO, null);
+
+    var optimalna_poteza = null;
+    var optimalna_ocena = NESKONCNO;
+
     for(var j = 0; j < veljavne_poteze.length; ++j) {
         var poteza = veljavne_poteze[j];
 
@@ -286,13 +293,15 @@ AI.prototype.minimiziraj = function (globina) {
 
         this.aiMreza.poteza_nazaj();
 
-        if(ocena_poteze < optimalna_poteza.ocena){
-            optimalna_poteza = new OptimalnaPoteza(poteza, ocena_poteze, this.aiMreza.na_potezi);
+        if(ocena_poteze < optimalna_ocena){
+            optimalna_poteza = poteza;
+            optimalna_ocena = ocena_poteze;
         }
 
     }
 
-    optimalna_poteza.ocena += this.hevristika.kaznuj_globino(this.globina - globina, false);
+    optimalna_poteza = new OptimalnaPoteza(optimalna_poteza, optimalna_ocena +
+        this.hevristika.kaznuj_globino(this.globina - globina, false), this.aiMreza.na_potezi);
 
     return optimalna_poteza;
 };
@@ -326,7 +335,9 @@ AI.prototype.alphabeta = function(maksimiramo, globina, alpha, beta){
 AI.prototype.alphabeta_maximiziraj = function (globina, alpha, beta){
     var veljavne_poteze = this.aiMreza.veljavne_poteze();
 
-    var optimalna_poteza = new OptimalnaPoteza(null, -NESKONCNO, null);
+    var optimalna_poteza = null;
+    var optimalna_ocena = -NESKONCNO;
+
     for(var j = 0; j < veljavne_poteze.length; ++j) {
         var poteza = veljavne_poteze[j];
 
@@ -339,24 +350,29 @@ AI.prototype.alphabeta_maximiziraj = function (globina, alpha, beta){
 
         this.aiMreza.poteza_nazaj();
 
-        if(ocena_poteze > optimalna_poteza.ocena){
-            optimalna_poteza = new OptimalnaPoteza(poteza, ocena_poteze, this.aiMreza.na_potezi);
-            alpha = optimalna_poteza.ocena;
+        if(ocena_poteze > optimalna_ocena){
+            optimalna_poteza = poteza;
+            optimalna_ocena = ocena_poteze;
+
+            alpha = optimalna_ocena;
             if(beta <= alpha){
                 break; // Obrezemo
             }
         }
     }
 
-    // Kaznujmo globino na koncu, vmes nima veze (razen mogoce za obrezovanje)
-    optimalna_poteza.ocena += this.hevristika.kaznuj_globino(this.globina - globina, true);
+    optimalna_poteza = new OptimalnaPoteza(optimalna_poteza, optimalna_ocena +
+        this.hevristika.kaznuj_globino(this.globina - globina, false), this.aiMreza.na_potezi);
 
     return optimalna_poteza;
 };
 
 AI.prototype.alphabeta_minimiziraj = function (globina, alpha, beta) {
     var veljavne_poteze = this.aiMreza.veljavne_poteze();
-    var optimalna_poteza = new OptimalnaPoteza(null, NESKONCNO, null);
+
+    var optimalna_poteza = null;
+    var optimalna_ocena = NESKONCNO;
+
     for(var j = 0; j < veljavne_poteze.length; ++j) {
         var poteza = veljavne_poteze[j];
 
@@ -367,9 +383,11 @@ AI.prototype.alphabeta_minimiziraj = function (globina, alpha, beta) {
 
         this.aiMreza.poteza_nazaj();
 
-        if(ocena_poteze < optimalna_poteza.ocena){
-            optimalna_poteza = new OptimalnaPoteza(poteza, ocena_poteze, this.aiMreza.na_potezi);
-            beta = optimalna_poteza.ocena;
+        if(ocena_poteze < optimalna_ocena){
+            optimalna_poteza = poteza;
+            optimalna_ocena = ocena_poteze;
+
+            beta = optimalna_ocena;
             if(beta <= alpha){
                 break;
             }
@@ -377,7 +395,8 @@ AI.prototype.alphabeta_minimiziraj = function (globina, alpha, beta) {
 
     }
 
-    optimalna_poteza.ocena += this.hevristika.kaznuj_globino(this.globina - globina, false);
+    optimalna_poteza = new OptimalnaPoteza(optimalna_poteza, optimalna_ocena +
+        this.hevristika.kaznuj_globino(this.globina - globina, false), this.aiMreza.na_potezi);
 
     return optimalna_poteza;
 };
