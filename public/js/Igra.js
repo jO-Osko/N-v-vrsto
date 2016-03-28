@@ -5,15 +5,21 @@ function IgralnaCelica(html_celica, zacetni_igralec){
 }
 
 
-IgralnaCelica.prototype.odigraj_potezo = function (nov_igralec){
+IgralnaCelica.prototype.odigraj_potezo = function (nov_igralec, animacija){
     this.igralec = nov_igralec;
-    this.spremeni_barvo();
+    if(!animacija){
+        this.spremeni_barvo();
+    }
 };
 
 
-IgralnaCelica.prototype.spremeni_barvo = function () {
+IgralnaCelica.prototype.spremeni_barvo = function (igralec) {
     this.html_celica.attr("class", "");
-    this.html_celica.addClass(this.igralec.html_razred_barve);
+    if(igralec){
+        this.html_celica.addClass(igralec.html_razred_barve);
+    }else{
+        this.html_celica.addClass(this.igralec.html_razred_barve);
+    }
 };
 
 
@@ -78,12 +84,13 @@ Igra.prototype.izracunaj_potezo = function(poteza){
 
 };
 
-Igra.prototype.opravi_potezo = function(vrstica, stolpec){
+Igra.prototype.opravi_potezo = function(vrstica, stolpec, animacija){
     var poteza = new Poteza(vrstica, stolpec, this.na_potezi);
     this.poteze.push(poteza);
-    this.html_mreza[stolpec][vrstica].odigraj_potezo(this.na_potezi);
 
-    var zmaga = this.preveri_zmago(stolpec, vrstica);
+    this.html_mreza[stolpec][vrstica].odigraj_potezo(this.na_potezi, animacija);
+
+    var zmaga = this.preveri_zmago(stolpec, vrstica, this.na_potezi);
     if(zmaga !== null){
         this.koncano = STANJE.KONCANO;
         this.narisi_zmago(zmaga)
@@ -96,7 +103,9 @@ Igra.prototype.opravi_potezo = function(vrstica, stolpec){
 Igra.prototype.igraj = function(stolpec){
     try{
         var vrstica = this.izracunaj_potezo(stolpec);
-        this.opravi_potezo(vrstica, stolpec);
+        var igralec = this.na_potezi;
+        this.opravi_potezo(vrstica, stolpec, true);
+        this.animiraj_potezo(stolpec, vrstica, igralec);
         this.AI.igraj(stolpec);
     }
     catch (e){
@@ -124,8 +133,9 @@ Igra.prototype.skrij_potezo = function(stolpec){
     this.kazalci[stolpec].skrij_potezo();
 };
 
-Igra.prototype.preveri_zmago = function(stolpec, vrstica){
-    var igralec = this.html_mreza[stolpec][vrstica].igralec;    
+
+// Igralca potrebujemo zaradi animacije
+Igra.prototype.preveri_zmago = function(stolpec, vrstica, igralec){
     return(
         this.preveri_zmago_vertikalno(stolpec, vrstica, igralec) ||
 
@@ -230,11 +240,32 @@ Igra.prototype.narisi_zmago = function(zmaga){
 Igra.prototype.poteza_nazaj = function(){
     var zadnja = this.poteze.pop();
     this.na_potezi = zadnja.igralec;
-    //TODO: pobrisat je treba še html_mrežo
-    //na poziciji zadnja.vrstica, zadnja.stolpec
 
-    this.koncano = STANJE.NE_KONCANO; //ne mormo igrt po tem k je enkrat �e konc
+    this.html_mreza[zadnja.stolpec][zadnja.vrstica].odigraj_potezo(IGRALCI.NE_ODIGRANO);
+    this.koncano = STANJE.NE_KONCANO; //ne mormo igrt po tem k je enkrat ze konc
 
     this.AI.poteza_nazaj();
+
+};
+
+Igra.prototype.animiraj_potezo = function(stolpec, vrstica, trenutni_igralec){
+    var time_lapse = 50;
+    var trenutna_vrstica = 0;
+
+    var igra = this; // this je lahko nevaren
+
+    var id = setInterval(function(){
+        if(trenutna_vrstica != 0){
+            igra.html_mreza[stolpec][trenutna_vrstica-1].spremeni_barvo(IGRALCI.NE_ODIGRANO);
+        }
+        igra.html_mreza[stolpec][trenutna_vrstica].spremeni_barvo(trenutni_igralec);
+        if(trenutna_vrstica == vrstica){
+            igra.html_mreza[stolpec][trenutna_vrstica].odigraj_potezo(trenutni_igralec); // odigramo zadnjo
+            clearTimeout(id);
+            return;
+        }
+        ++trenutna_vrstica;
+
+    }, time_lapse);
 
 };
