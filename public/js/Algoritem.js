@@ -177,12 +177,14 @@ function AlphaBeta(ime, igra, hevristika, globina){
 
 AlphaBeta.prototype.najboljsa_poteza = function (){
     this.maksimizirani_igralec = this.igra.dobi_trenutnega_igralca();
-    var optimalna_poteza = this.alphabeta(true, this.globina, -Infinity, Infinity);
+    var optimalna_poteza = this.alphabeta_poteza(true, this.globina, -Infinity, Infinity);
     this.maksimizirani_igralec = null;
     return optimalna_poteza;
 };
 
-AlphaBeta.prototype.alphabeta = function(maksimiramo, globina, alpha, beta){
+
+// Razbremenimo smetarja(GC) in ne ustvarjajmo tako veliko malih objektov
+AlphaBeta.prototype.alphabeta_poteza = function(maksimiramo, globina, alpha, beta){
     // Veselo uporabimo dejstvo, da je javascript dinamicno tipiziran jezik, in mocno udarimo uporabnika, ki bi minmax
     // klical na ze koncani plosci.
     // Nasvet za uporabnika: uporabljal metodo: Ai.najboljsa_poteza, saj ti sama pove, kaj pocne.
@@ -204,13 +206,13 @@ AlphaBeta.prototype.alphabeta = function(maksimiramo, globina, alpha, beta){
     }
 
     if(maksimiramo){
-        return this.alphabeta_maximiziraj(globina, alpha, beta)
+        return this.alphabeta_maximiziraj_poteza(globina, alpha, beta)
     }else{
         return this.alphabeta_minimiziraj(globina, alpha, beta);
     }
 };
 
-AlphaBeta.prototype.alphabeta_maximiziraj = function (globina, alpha, beta){
+AlphaBeta.prototype.alphabeta_maximiziraj_poteza = function (globina, alpha, beta){
     var veljavne_poteze = this.igra.dobi_veljavne_poteze();
 
     var optimalna_poteza = null;
@@ -223,8 +225,6 @@ AlphaBeta.prototype.alphabeta_maximiziraj = function (globina, alpha, beta){
 
         // Gremo v globino in ignoriramo vse razen ocene pozicije
         var ocena_poteze = this.alphabeta(false, globina-1, alpha, beta);
-
-        ocena_poteze = ocena_poteze.ocena;
 
         this.igra.poteza_nazaj();
 
@@ -245,11 +245,38 @@ AlphaBeta.prototype.alphabeta_maximiziraj = function (globina, alpha, beta){
     return optimalna_poteza;
 };
 
-AlphaBeta.prototype.alphabeta_minimiziraj = function (globina, alpha, beta) {
+
+AlphaBeta.prototype.alphabeta = function(maksimiramo, globina, alpha, beta){
+    // Veselo uporabimo dejstvo, da je javascript dinamicno tipiziran jezik, in mocno udarimo uporabnika, ki bi minmax
+    // klical na ze koncani plosci.
+    // Nasvet za uporabnika: uporabljal metodo: Ai.najboljsa_poteza, saj ti sama pove, kaj pocne.
+
+    if(this.igra.dobi_stanje() == STANJE.KONCANO){
+        var zmagovalec = this.igra.dobi_zmagovalca();
+        if(zmagovalec == this.maksimizirani_igralec){
+            return this.hevristika.tockuj_zmago();
+        }else if(zmagovalec != IGRALCI.NE_ODIGRANO){
+            return this.hevristika.tockuj_poraz();
+        }else{
+            return this.hevristika.tockuj_remi();
+        }
+    }
+
+    if(globina == 0){
+        return this.hevristika.oceni_plosco(this.igra.dobi_mrezo());
+    }
+
+    if(maksimiramo){
+        return this.alphabeta_maximiziraj(globina, alpha, beta)
+    }else{
+        return this.alphabeta_minimiziraj(globina, alpha, beta);
+    }
+};
+
+AlphaBeta.prototype.alphabeta_maximiziraj = function (globina, alpha, beta){
     var veljavne_poteze = this.igra.dobi_veljavne_poteze();
 
-    var optimalna_poteza = null;
-    var optimalna_ocena = NESKONCNO;
+    var optimalna_ocena = -NESKONCNO;
 
     for(var j = 0; j < veljavne_poteze.length; ++j) {
         var poteza = veljavne_poteze[j];
@@ -257,12 +284,39 @@ AlphaBeta.prototype.alphabeta_minimiziraj = function (globina, alpha, beta) {
         this.igra.igraj(poteza);
 
         // Gremo v globino in ignoriramo vse razen ocene pozicije
-        var ocena_poteze = this.alphabeta(true, globina-1, alpha, beta).ocena;
+        var ocena_poteze = this.alphabeta(false, globina-1, alpha, beta);
+
+        this.igra.poteza_nazaj();
+
+        if(ocena_poteze > optimalna_ocena){
+            optimalna_ocena = ocena_poteze;
+
+            alpha = optimalna_ocena;
+            if(beta <= alpha){
+                break; // Obrezemo
+            }
+        }
+    }
+
+    return optimalna_ocena + this.hevristika.kaznuj_globino(this.globina - globina, false);
+
+};
+
+AlphaBeta.prototype.alphabeta_minimiziraj = function (globina, alpha, beta) {
+    var veljavne_poteze = this.igra.dobi_veljavne_poteze();
+
+    var optimalna_ocena = NESKONCNO;
+
+    for(var j = 0; j < veljavne_poteze.length; ++j) {
+        var poteza = veljavne_poteze[j];
+
+        this.igra.igraj(poteza);
+
+        var ocena_poteze = this.alphabeta(true, globina-1, alpha, beta);
 
         this.igra.poteza_nazaj();
 
         if(ocena_poteze < optimalna_ocena){
-            optimalna_poteza = poteza;
             optimalna_ocena = ocena_poteze;
 
             beta = optimalna_ocena;
@@ -273,11 +327,9 @@ AlphaBeta.prototype.alphabeta_minimiziraj = function (globina, alpha, beta) {
 
     }
 
-    optimalna_poteza = new OptimalnaPoteza(optimalna_poteza, optimalna_ocena +
-        this.hevristika.kaznuj_globino(this.globina - globina, false), this.igra.dobi_trenutnega_igralca());
-
-    return optimalna_poteza;
+    return optimalna_ocena + this.hevristika.kaznuj_globino(this.globina - globina, false);
 };
+
 
 
 var minimax = new Minimax("MiniMax", null, null, 4);
