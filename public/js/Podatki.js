@@ -62,3 +62,14 @@ function Nastavitve(visina_celice, sirina_celice, obloga /*padding*/, meja){
     this.polna_sirina_celice = this.sirina_celice + 2 * this.obloga + this.meja;
     this.polna_visina_celice = this.visina_celice + 2 * this.obloga + this.meja;
 }
+
+function OcenaHevristika(igralec, dolzina) {    
+    this.igralec = igralec;
+    this.vrednost = null;
+    this.dolzina = dolzina;    
+    
+}
+
+OcenaHevristika.prototype.dobi_vrednost = function(){
+    return Math.pow(10, this.dolzina);
+};

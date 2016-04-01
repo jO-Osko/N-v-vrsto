@@ -263,7 +263,7 @@ AlphaBeta.prototype.alphabeta = function(maksimiramo, globina, alpha, beta){
     }
 
     if(globina == 0){
-        return this.hevristika.oceni_plosco(this.igra.dobi_mrezo());
+        return this.hevristika.oceni_plosco(this.igra.dobi_mrezo(), this.igra.dobi_trenutnega_igralca());
     }
 
     if(maksimiramo){
@@ -334,4 +334,4 @@ AlphaBeta.prototype.alphabeta_minimiziraj = function (globina, alpha, beta) {
 
 var minimax = new Minimax("MiniMax", null, null, 4);
 
-var alphabeta = new AlphaBeta("Alpha-Beta", null, null, 10);
+var alphabeta = new AlphaBeta("Alpha-Beta", null, null, 6);
