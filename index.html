@@ -17,32 +17,74 @@
 
 <body>
 <div id="wrapper">
-
+  <div class="center">
+    <h1>N v vrsto</h1>
+  </div>
   <div id="glavna-plosca">
     <div id="plosca-kazalcev">
     </div>
     <div id="glavna-igralna-plosca">
     </div>
+    <div id="bottom">
+      <div id="nastavitve" style="float: left">
+        <h2 onclick="$('#pod-nastavitve').toggle(500)">Nastavitve</h2>
+        <div id="pod-nastavitve">
+          <label for="sirina-plosce">
+            Širina plošče
+          </label><br>
+          <input id="sirina-plosce" type="number" min="2" step="1" value="7">
+          <br>
+          <label for="visina-plosce">
+            Višina plošče
+          </label><br>
+          <input id="visina-plosce" type="number" min="2" step="1" value="7">
+          <br>
+          <label for="v-vrsto">
+            V vrsto
+          </label><br>
+          <input id="v-vrsto" type="number" min="2" step="1" value="7"><br>
+          <label for="prvi-igralec">
+            Prvi igralec
+          </label><br>
+          <select id="prvi-igralec">
+            <option value="clovek">Človek</option>
+            <option value="racunalnik">Računalnik</option>
+          </select><br>
+          <label for="drugi-igralec">
+            Drugi igralec
+          </label><br>
+          <select id="drugi-igralec">
+            <option value="clovek">Človek</option>
+            <option value="racunalnik">Računalnik</option>
+          </select><br>
+        </div>
+
+      </div>
+      <div id="game-info" style="float:right">
+        <h2>Na potezi</h2>
+        <p id="na-potezi">Človek (modra)</p>
+      </div>
+      <div id="igralne-nastavitve" style="margin-left: auto; margin-right: auto; text-align: center">
+        <h2>Ponovno igraj</h2>
+        <button id="restart-game-button" type="button"  class="btn btn-default">Ponovno igraj</button>
+        <button id="igraj-AI" type="button" class="btn btn-default">Nasvet/igraj računalnik</button>
+      </div>
+    </div>
+
   </div>
 
 </div>
 
-<div id="restart_box">
-  <h2>Ponovno igraj</h2>
-  <button id="restart-game-button" type="button"  class="btn btn-default">Restart game</button>
-</div>
-<div id="igraj_AI">
-  <button id="igraj-AI" type="button" class="btn btn-default">Igraj AI</button>
-</div>
+
 
 <script>
   $("#restart-game-button").click(
     function restart_game(){
-    //var context = document.getElementById("zmagovalno-platno").getContext("2d");
-    //var canvas = $("<canvas>", {class:"platno-pocez", id:"zmagovalno-platno"});
-    //context.clearRect(0,0, canvas.width, canvas.height);
-    $("#zmagovalno-platno").remove();
-    naredi_plosco(10, 7, 4);
+      var visina = parseInt($("#visina-plosce").val());
+      var sirina = parseInt($("#sirina-plosce").val());
+      var v_vrsto = parseInt($("#v-vrsto").val());
+      $("#zmagovalno-platno").remove();
+      naredi_plosco(sirina, visina, v_vrsto);
     });
   naredi_plosco(10,7,4);
 </script>

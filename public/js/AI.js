@@ -511,7 +511,8 @@ AI.prototype.dobi_veljavne_poteze = function(){
     return this.aiMreza.veljavne_poteze();
 };
 
-AI.prototype.najboljsa_poteza = function(igralec) {
+AI.prototype.najboljsa_poteza = function() {
+    var igralec = this.dobi_trenutnega_igralca();
     this.maksimizirani_igralec = igralec;
     var najbolsa_poteza = this.algoritem.najboljsa_poteza();
     console.log("optimalna", najbolsa_poteza);

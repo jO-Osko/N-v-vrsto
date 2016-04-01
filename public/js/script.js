@@ -1,4 +1,4 @@
-function naredi_plosco(sirina, visina, v_vrsto){
+function naredi_plosco(sirina, visina, v_vrsto, prvi_igralec){
     var html_igralna_plosca = $("<table>", {class:"igralna-plosca", id:"glavna-igralna-plosca"});
 
     var mreza = [];
@@ -84,6 +84,6 @@ function naredi_plosco(sirina, visina, v_vrsto){
 
     });
 
-    var glavna_igralna_plosca = new Igra(mreza, kazalci, visina, sirina, v_vrsto, new Nastavitve(60,60));
+    var glavna_igralna_plosca = new Igra(mreza, kazalci, visina, sirina, v_vrsto, prvi_igralec, new Nastavitve(60,60));
 
 }

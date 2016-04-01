@@ -21,6 +21,15 @@ body{
     display: table;
 }
 
+.center{
+    margin: 0 auto auto;
+    display: table;
+}
+
+
+#bottom{
+    min-width:600px;
+}
 .igralna-plosca{
     background-color: orange;
     border-collapse: collapse;
