@@ -90,7 +90,7 @@ Hevristika.prototype.preveri_vrstice = function(plosca){
             }
             if(trenutni == null){
                 if(plosca[i][vrstica] == IGRALCI.NE_ODIGRANO){
-                    continue;
+                    // nadaljujemo z zanko
                 }
                 else{
                     trenutni = plosca[i][vrstica];
@@ -135,12 +135,12 @@ Hevristika.prototype.preveri_desno_diagonalo = function(plosca){
                 var koncna_vrstica = skupno - this.sirina + 1;
             }
             else{               
-                var koncna_vrstica = 0;
+                koncna_vrstica = 0;
             }
         }
         else{
-            var zacetna_vrstica = skupno;            
-            var koncna_vrstica = 0
+            zacetna_vrstica = skupno;
+            koncna_vrstica = 0
         }        
         var prejsni = null;
         var trenutni = null;
@@ -152,7 +152,7 @@ Hevristika.prototype.preveri_desno_diagonalo = function(plosca){
             }
             if(trenutni == null){               
                 if(plosca[i][vrstica] == IGRALCI.NE_ODIGRANO){
-                    continue;
+                    // Nadaljujemo z zanko
                 }
                 else{                                        
                     trenutni = plosca[i][vrstica];
@@ -201,9 +201,9 @@ Hevristika.prototype.preveri_levo_diagonalo = function(plosca){
         var druga_meja = this.sirina - 1 - (this.v_vrsto - 1); //zadanemo v spodnji desni  kot
     }
     else{
-        var prva_meja = this.sirina - 1 - (this._vrsto - 1); //zadanemo v spodnji desni  kot
-        var druga_meja = this.visina - 1 - (this.v_vrsto - 1);
-        var tip_igre = -1;
+        prva_meja = this.sirina - 1 - (this._vrsto - 1); //zadanemo v spodnji desni  kot
+        druga_meja = this.visina - 1 - (this.v_vrsto - 1);
+        tip_igre = -1;
     }
     
     for(var skupno = zacetek; skupno < this.sirina + this.visina - 1 - 2*(this.v_vrsto - 1); skupno++){        
@@ -213,26 +213,26 @@ Hevristika.prototype.preveri_levo_diagonalo = function(plosca){
                 var koncni_stolpec = this.v_vrsto - 1 + skupno;                
             }
             else if(skupno > prva_meja && skupno < druga_meja){
-                var zacetni_stolpec = skupno - (this.visina - 1) + this.v_vrsto - 1;
-                var koncni_stolpec = zacetni_stolpec + this.visina - 1;                
+                zacetni_stolpec = skupno - (this.visina - 1) + this.v_vrsto - 1;
+                koncni_stolpec = zacetni_stolpec + this.visina - 1;
             }
             else if(skupno >= druga_meja){
-                var zacetni_stolpec = skupno - (this.visina - 1) + this.v_vrsto - 1;
-                var koncni_stolpec = this.sirina - 1;
+                zacetni_stolpec = skupno - (this.visina - 1) + this.v_vrsto - 1;
+                koncni_stolpec = this.sirina - 1;
             }
         }
         else{
             if(skupno <= prva_meja){
-                var zacetni_stolpec = 0;
-                var koncni_stolpec = this.v_vrsto - 1 + skupno;                
+                zacetni_stolpec = 0;
+                koncni_stolpec = this.v_vrsto - 1 + skupno;
             }
             else if(skupno <= druga_meja){
-                var zacetni_stolpec = 0;
-                var koncni_stolpec = this.sirina - 1;                
+                zacetni_stolpec = 0;
+                koncni_stolpec = this.sirina - 1;
             }
             else{
-                var zacetni_stolpec = skupno - (this.visina - 1 - this.v_vrsto - 1);
-                var koncni_stolpec = this.sirina - 1;
+                zacetni_stolpec = skupno - (this.visina - 1 - this.v_vrsto - 1);
+                koncni_stolpec = this.sirina - 1;
             }
 
         }
@@ -249,7 +249,7 @@ Hevristika.prototype.preveri_levo_diagonalo = function(plosca){
             if(trenutni == null){                               
                 if(plosca[i][vrstica] == IGRALCI.NE_ODIGRANO){
                     prejsni = IGRALCI.NE_ODIGRANO;                    
-                    continue;
+                    // Nadaljujemo z zanko
                 }
                 else{                                                       
                     trenutni = plosca[i][vrstica];
