@@ -90,7 +90,7 @@ Hevristika.prototype.preveri_vrstice = function(plosca){
             }
             if(trenutni == null){
                 if(plosca[i][vrstica] == IGRALCI.NE_ODIGRANO){
-                    // nadaljujemo z zanko
+                    continue;
                 }
                 else{
                     trenutni = plosca[i][vrstica];
@@ -100,15 +100,12 @@ Hevristika.prototype.preveri_vrstice = function(plosca){
                     }
                 }               
             }
-            else{
-                if(plosca[i][vrstica] != trenutni){
-                    if(dolzina == this.v_vrsto - 1){
+            else{                
+                if(plosca[i][vrstica] != trenutni &&  (plosca[i][vrstica] != IGRALCI.NE_ODIGRANO || i == this.sirina - 1)){//končamo le če najdemo igralca ki ni trenutni
+                    if(dolzina >=this.v_vrsto - 1){
                         if(prejsni == IGRALCI.NE_ODIGRANO){
-                            ocene.push(new OcenaHevristika(trenutni, dolzina));
-                        }
-                        if(plosca[i][vrstica] == IGRALCI.NE_ODIGRANO){
-                            ocene.push(new OcenaHevristika(trenutni, dolzina));
-                        }                           
+                            ocene.push(new OcenaHevristika(trenutni, this.v_vrsto - 1));
+                        }                                            
                     }
                     else{
                         //ni dovolj v vrsto
@@ -118,8 +115,18 @@ Hevristika.prototype.preveri_vrstice = function(plosca){
                     dolzina = 1;
                 }
                 else{
-                    dolzina += 1;
+                    if(plosca[i][vrstica] == IGRALCI.NE_ODIGRANO){
+                        prejsni = IGRALCI.NE_ODIGRANO;                        
+                    }
+                    else{
+                        dolzina += 1;
+                    }
                 }
+            }
+            if(dolzina >=this.v_vrsto - 1){
+                    if(prejsni == IGRALCI.NE_ODIGRANO){
+                        ocene.push(new OcenaHevristika(trenutni, this.v_vrsto - 1));
+                    }                                            
             }
         }
     }
@@ -139,7 +146,7 @@ Hevristika.prototype.preveri_desno_diagonalo = function(plosca){
             }
         }
         else{
-            zacetna_vrstica = skupno;
+            zacetna_vrstica = skupno;            
             koncna_vrstica = 0
         }        
         var prejsni = null;
@@ -150,24 +157,23 @@ Hevristika.prototype.preveri_desno_diagonalo = function(plosca){
             if(trenutni == IGRALCI.NE_ODIGRANO && plosca[i][vrstica] == IGRALCI.NE_ODIGRANO){
                 continue;
             }
-            if(trenutni == null){               
+            if(trenutni == null){
                 if(plosca[i][vrstica] == IGRALCI.NE_ODIGRANO){
+                    prejsni = IGRALCI.NE_ODIGRANO;                    
                     // Nadaljujemo z zanko
                 }
-                else{                                        
-                    trenutni = plosca[i][vrstica];
+                else{
+
+                    trenutni = plosca[i][vrstica];                    
                     dolzina = 1;                    
                 }               
-            }            
-            else{
-                if(plosca[i][vrstica] != trenutni){                                       
-                    if(dolzina == this.v_vrsto - 1){
+            }
+            else{                
+                if(plosca[i][vrstica] != trenutni &&  (plosca[i][vrstica] != IGRALCI.NE_ODIGRANO || vrstica == koncna_vrstica)){//končamo le če najdemo igralca ki ni trenutni
+                    if(dolzina >=this.v_vrsto - 1){
                         if(prejsni == IGRALCI.NE_ODIGRANO){
-                            ocene.push(new OcenaHevristika(trenutni, dolzina));
-                        }
-                        if(plosca[i][vrstica] == IGRALCI.NE_ODIGRANO){
-                            ocene.push(new OcenaHevristika(trenutni, dolzina));
-                        }                           
+                            ocene.push(new OcenaHevristika(trenutni, this.v_vrsto - 1));
+                        }                                            
                     }
                     else{
                         //ni dovolj v vrsto
@@ -177,8 +183,19 @@ Hevristika.prototype.preveri_desno_diagonalo = function(plosca){
                     dolzina = 1;
                 }
                 else{
-                    dolzina += 1;
+                    if(plosca[i][vrstica] == IGRALCI.NE_ODIGRANO){
+                        prejsni = IGRALCI.NE_ODIGRANO;                        
+                    }
+                    else{                        
+                        dolzina += 1;
+                    }
                 }
+            }
+            
+            if(vrstica == koncna_vrstica && (dolzina >=this.v_vrsto - 1)){
+                    if(prejsni == IGRALCI.NE_ODIGRANO){
+                        ocene.push(new OcenaHevristika(trenutni, this.v_vrsto - 1));
+                    }                                            
             }            
             
         }
@@ -186,7 +203,6 @@ Hevristika.prototype.preveri_desno_diagonalo = function(plosca){
     return ocene;
     
 };
-
 Hevristika.prototype.preveri_levo_diagonalo = function(plosca){
     //funkcija deluje tako da se sprehodi po število vseh diagonal ki so dolžine vsaj
     //v_vrsto. Za vsako to diagonalo določi začetni in končni stolpec glede na obliko
@@ -241,31 +257,28 @@ Hevristika.prototype.preveri_levo_diagonalo = function(plosca){
         var dolzina = 0;        
         for(var i = zacetni_stolpec; i <= koncni_stolpec; i++){           
             var vrstica = Math.max(this.visina - this.v_vrsto  - skupno + i, 0); //določimo vrstico glede na trenutni stolpec
-            
+            //console.log(i, vrstica, trenutni);
                                 
             if(trenutni == IGRALCI.NE_ODIGRANO && plosca[i][vrstica] == IGRALCI.NE_ODIGRANO){
                 continue;
-            }           
-            if(trenutni == null){                               
+            }
+            if(trenutni == null){
                 if(plosca[i][vrstica] == IGRALCI.NE_ODIGRANO){
                     prejsni = IGRALCI.NE_ODIGRANO;                    
                     // Nadaljujemo z zanko
                 }
-                else{                                                       
-                    trenutni = plosca[i][vrstica];
+                else{
+
+                    trenutni = plosca[i][vrstica];                    
                     dolzina = 1;                    
                 }               
             }
-            
-            else{
-                if(plosca[i][vrstica] != trenutni){                                       
-                    if(dolzina == this.v_vrsto - 1){
+            else{                
+                if(plosca[i][vrstica] != trenutni &&  (plosca[i][vrstica] != IGRALCI.NE_ODIGRANO || i == koncni_stolpec)){//končamo le če najdemo igralca ki ni trenutni
+                    if(dolzina >=this.v_vrsto - 1){
                         if(prejsni == IGRALCI.NE_ODIGRANO){
-                            ocene.push(new OcenaHevristika(trenutni, dolzina));
-                        }
-                        if(plosca[i][vrstica] == IGRALCI.NE_ODIGRANO){
-                            ocene.push(new OcenaHevristika(trenutni, dolzina));
-                        }                           
+                            ocene.push(new OcenaHevristika(trenutni, this.v_vrsto - 1));
+                        }                                            
                     }
                     else{
                         //ni dovolj v vrsto
@@ -275,17 +288,20 @@ Hevristika.prototype.preveri_levo_diagonalo = function(plosca){
                     dolzina = 1;
                 }
                 else{
-                    dolzina += 1;
-                    if(i == koncni_stolpec && dolzina == this.v_vrsto - 1){
-                        if(prejsni == IGRALCI.NE_ODIGRANO){
-                            ocene.push(new OcenaHevristika(trenutni, dolzina));
-                        }
-                        if(plosca[i][vrstica] == IGRALCI.NE_ODIGRANO){
-                            ocene.push(new OcenaHevristika(trenutni, dolzina));
-                        }
+                    if(plosca[i][vrstica] == IGRALCI.NE_ODIGRANO){
+                        prejsni = IGRALCI.NE_ODIGRANO;                        
+                    }
+                    else{                        
+                        dolzina += 1;
                     }
                 }
-            }           
+            }
+            
+            if(dolzina >=this.v_vrsto - 1){
+                    if(prejsni == IGRALCI.NE_ODIGRANO){
+                        ocene.push(new OcenaHevristika(trenutni, this.v_vrsto - 1));
+                    }                                            
+            }
         }        
     }
 
