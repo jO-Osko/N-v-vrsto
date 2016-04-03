@@ -72,13 +72,7 @@ function naredi_plosco(sirina, visina, v_vrsto, prvi_igralec){
         if(glavna_igralna_plosca.na_potezi.clovek){ // Namig
             var poteza = glavna_igralna_plosca.najboljsa_poteza();
 
-            console.log(poteza);
-
-            console.log("Poteza stolpec", poteza);
-
             var vrstica = glavna_igralna_plosca.izracunaj_potezo(poteza);
-
-            console.log(vrstica);
 
             glavna_igralna_plosca.animiraj_potezo(poteza, vrstica, glavna_igralna_plosca.na_potezi, true);
 
@@ -86,8 +80,6 @@ function naredi_plosco(sirina, visina, v_vrsto, prvi_igralec){
 
         }else{
             poteza = glavna_igralna_plosca.najboljsa_poteza();
-
-            console.log(poteza);
 
             glavna_igralna_plosca.igraj(poteza);
         }

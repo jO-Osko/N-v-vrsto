@@ -351,13 +351,17 @@ AIMreza.prototype.naredi_mrezo = function(){
     return nova_mreza;
 };
 
-AIMreza.prototype.veljavne_poteze = function(){
+AIMreza.prototype.veljavne_poteze = function(po_vrsti){
     var veljavne = [];
     for(var i = 0; i < this.sirina; i++){
         if(this.je_poteza_veljavna(i)){
             veljavne.push(i);
         }
-    }    
+    }
+    if(!po_vrsti){
+        premesaj_seznam(veljavne);
+    }
+
     return veljavne;
 };
 
