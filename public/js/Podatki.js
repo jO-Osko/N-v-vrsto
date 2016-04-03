@@ -75,3 +75,14 @@ function OcenaHevristika(igralec, dolzina) {
 OcenaHevristika.prototype.dobi_vrednost = function(){
     return Math.pow(10, this.dolzina);
 };
+
+// Hvala wikipediji
+// https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+function premesaj_seznam(seznam) {
+    for (var i = seznam.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = seznam[i];
+        seznam[i] = seznam[j];
+        seznam[j] = temp;
+    }
+}
