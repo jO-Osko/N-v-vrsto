@@ -410,11 +410,11 @@ AIMreza.prototype.igraj = function(stolpec){
 
 AIMreza.prototype.zamenjaj_igralca = function(){
     //Za 2 igralca je to dovolj
-    if(this.na_potezi == IGRALCI.CLOVEK){
-        this.na_potezi = IGRALCI.RACUNALNIK;
+    if(this.na_potezi == IGRALCI.IGRALEC_1){
+        this.na_potezi = IGRALCI.IGRALEC_2;
     }
     else{
-        this.na_potezi = IGRALCI.CLOVEK;
+        this.na_potezi = IGRALCI.IGRALEC_1;
     }
 };
 

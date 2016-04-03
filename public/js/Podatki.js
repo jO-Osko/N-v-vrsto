@@ -5,10 +5,10 @@ function Igralec(id, barva){
 }
 
 IGRALCI = {};
-IGRALCI.CLOVEK = new Igralec(1, "modra");
-IGRALCI.RACUNALNIK = new Igralec(2, "rdeca");
+IGRALCI.IGRALEC_1 = new Igralec(1, "modra");
+IGRALCI.IGRALEC_2 = new Igralec(2, "rdeca");
 IGRALCI.NE_ODIGRANO = new Igralec(0, "bela");
-IGRALCI.DEFUALT = IGRALCI.CLOVEK;
+IGRALCI.DEFUALT = IGRALCI.IGRALEC_1;
 
 
 STANJE = {};

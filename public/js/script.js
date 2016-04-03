@@ -69,7 +69,7 @@ function naredi_plosco(sirina, visina, v_vrsto, prvi_igralec){
     $("#glavna-igralna-plosca").replaceWith(html_igralna_plosca);
     $("#igraj-AI").click(
     function(){
-        if(glavna_igralna_plosca.na_potezi == IGRALCI.RACUNALNIK){
+        if(glavna_igralna_plosca.na_potezi == IGRALCI.IGRALEC_2){
 
             var poteza = glavna_igralna_plosca.najboljsa_poteza();
 
@@ -84,6 +84,6 @@ function naredi_plosco(sirina, visina, v_vrsto, prvi_igralec){
 
     });
 
-    var glavna_igralna_plosca = new Igra(mreza, kazalci, visina, sirina, v_vrsto, prvi_igralec, new Nastavitve(60,60));
+    var glavna_igralna_plosca = new Igra(mreza, kazalci, visina, sirina, v_vrsto, new Nastavitve(60,60));
 
 }
