@@ -26,6 +26,9 @@ body{
     display: table;
 }
 
+#game-info{
+    min-width: 140px;
+}
 
 #bottom{
     min-width:600px;

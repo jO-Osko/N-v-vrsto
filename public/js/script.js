@@ -93,7 +93,9 @@ function naredi_plosco(sirina, visina, v_vrsto, prvi_igralec){
         }
     });
 
-    var glavna_igralna_plosca = new Igra(mreza, kazalci, visina, sirina, v_vrsto, new Nastavitve(60,60));
+    var glavna_igralna_plosca = new Igra(mreza, kazalci, visina, sirina, v_vrsto, $("#na-potezi"), new Nastavitve(60,60));
+
+    glavna_igralna_plosca.prikazi_naslednjega_igralca();
 
     // Popravimo nastavitve
                         // parseInt(true) == Nan, true + 1 = 2, WTF javascript

@@ -1,14 +1,15 @@
-function Igralec(id, barva, clovek){
+function Igralec(id, ime, barva, clovek){
     this.id = id;
+    this.ime = ime;
     this.barva = barva;
     this.html_razred_barve = barva.toString();
     this.clovek = clovek
 }
 
 IGRALCI = {};
-IGRALCI.IGRALEC_1 = new Igralec(1, "modra", true);
-IGRALCI.IGRALEC_2 = new Igralec(2, "rdeca", false);
-IGRALCI.NE_ODIGRANO = new Igralec(0, "bela");
+IGRALCI.IGRALEC_1 = new Igralec(1, "Igralec 1", "modra", true);
+IGRALCI.IGRALEC_2 = new Igralec(2, "Igralec 2", "rdeca", false);
+IGRALCI.NE_ODIGRANO = new Igralec(0, "Narava", "bela");
 IGRALCI.DEFUALT = IGRALCI.IGRALEC_1;
 
 

@@ -40,7 +40,7 @@ KazalcnaCelica.prototype.skrij_potezo = function (){
 };
 
 
-function Igra(html_mreza, kazalci, visina, sirina, v_vrsto, nastavitve) {
+function Igra(html_mreza, kazalci, visina, sirina, v_vrsto, prikaz_igralca, nastavitve) {
 
     this.html_mreza = html_mreza;
     this.kazalci = kazalci;
@@ -50,6 +50,7 @@ function Igra(html_mreza, kazalci, visina, sirina, v_vrsto, nastavitve) {
     this.visina = visina;
     this.sirina = sirina;
     this.v_vrsto = v_vrsto;
+    this.prikaz_igralca = prikaz_igralca;
     this.nastavitve = nastavitve;
 
     this.AI = new AI(nastavitve.globina || 10, undefined, new Hevristika(HEVRISTIKA.TOCKOVANJE, sirina, visina, v_vrsto), {visina:this.visina, sirina:this.sirina,
@@ -123,6 +124,14 @@ Igra.prototype.zamenjaj_igralca = function(){
     else{
         this.na_potezi = IGRALCI.IGRALEC_1;
     }
+
+    this.prikazi_naslednjega_igralca();
+};
+
+
+Igra.prototype.prikazi_naslednjega_igralca = function () {
+    this.prikaz_igralca.text(this.na_potezi.ime + " (" + ((this.na_potezi.clovek) ? "človek": "računalnik") + ")")
+
 };
 
 Igra.prototype.prikazi_potezo = function(stolpec){
