@@ -47,15 +47,15 @@
             Prvi igralec
           </label><br>
           <select id="prvi-igralec">
-            <option value="clovek">Človek</option>
-            <option value="racunalnik">Računalnik</option>
+            <option value="1">Človek</option>
+            <option value="0">Računalnik</option>
           </select><br>
           <label for="drugi-igralec">
             Drugi igralec
           </label><br>
           <select id="drugi-igralec">
-            <option value="clovek">Človek</option>
-            <option value="racunalnik">Računalnik</option>
+            <option value="1">Človek</option>
+            <option value="0">Računalnik</option>
           </select><br>
         </div>
 
@@ -83,7 +83,12 @@
       var visina = parseInt($("#visina-plosce").val());
       var sirina = parseInt($("#sirina-plosce").val());
       var v_vrsto = parseInt($("#v-vrsto").val());
+      var prvi_clovek = parseInt($("#prvi-igralec").val());
+      IGRALCI.IGRALEC_1.clovek = Boolean(prvi_clovek);
+      var drugi_clovek = parseInt($("#drugi-igralec").val());
+      IGRALCI.IGRALEC_2.clovek = Boolean(drugi_clovek);
       $("#zmagovalno-platno").remove();
+      $("#igraj-AI").unbind("click.igraj-potezo");
       naredi_plosco(sirina, visina, v_vrsto);
     });
   naredi_plosco(10,7,4);

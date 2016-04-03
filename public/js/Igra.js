@@ -248,7 +248,7 @@ Igra.prototype.poteza_nazaj = function(){
 
 };
 
-Igra.prototype.animiraj_potezo = function(stolpec, vrstica, trenutni_igralec){
+Igra.prototype.animiraj_potezo = function(stolpec, vrstica, trenutni_igralec, je_namig){
     var time_lapse = 50;
     var trenutna_vrstica = 0;
 
@@ -260,7 +260,14 @@ Igra.prototype.animiraj_potezo = function(stolpec, vrstica, trenutni_igralec){
         }
         igra.html_mreza[stolpec][trenutna_vrstica].spremeni_barvo(trenutni_igralec);
         if(trenutna_vrstica == vrstica){
-            igra.html_mreza[stolpec][trenutna_vrstica].odigraj_potezo(trenutni_igralec); // odigramo zadnjo
+            if(je_namig){
+                igra.html_mreza[stolpec][trenutna_vrstica].spremeni_barvo(trenutni_igralec); // odigramo zadnjo
+                setTimeout(function(){
+                    igra.html_mreza[stolpec][trenutna_vrstica].spremeni_barvo(IGRALCI.NE_ODIGRANO);
+                }, time_lapse);
+            }else {
+                igra.html_mreza[stolpec][trenutna_vrstica].odigraj_potezo(trenutni_igralec); // odigramo zadnjo
+            }
             clearTimeout(id);
             return;
         }

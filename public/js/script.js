@@ -67,23 +67,36 @@ function naredi_plosco(sirina, visina, v_vrsto, prvi_igralec){
 
     $("#plosca-kazalcev").replaceWith(tabela_kazalcev);
     $("#glavna-igralna-plosca").replaceWith(html_igralna_plosca);
-    $("#igraj-AI").click(
+    $("#igraj-AI").bind("click.igraj-potezo",
     function(){
-        if(glavna_igralna_plosca.na_potezi == IGRALCI.IGRALEC_2){
-
+        if(glavna_igralna_plosca.na_potezi.clovek){ // Namig
             var poteza = glavna_igralna_plosca.najboljsa_poteza();
 
             console.log(poteza);
 
-            glavna_igralna_plosca.igraj(poteza);
+            console.log("Poteza stolpec", poteza);
+
+            var vrstica = glavna_igralna_plosca.izracunaj_potezo(poteza);
+
+            console.log(vrstica);
+
+            glavna_igralna_plosca.animiraj_potezo(poteza, vrstica, glavna_igralna_plosca.na_potezi, true);
+
+            glavna_igralna_plosca.prikazi_potezo(poteza); // To zgleda malo cudno
 
         }else{
-            alert("nisi na potezi");
+            poteza = glavna_igralna_plosca.najboljsa_poteza();
+
+            console.log(poteza);
+
+            glavna_igralna_plosca.igraj(poteza);
         }
-
-
     });
 
     var glavna_igralna_plosca = new Igra(mreza, kazalci, visina, sirina, v_vrsto, new Nastavitve(60,60));
 
+    // Popravimo nastavitve
+                        // parseInt(true) == Nan, true + 1 = 2, WTF javascript
+    $("#prvi-igralec").val(String((IGRALCI.IGRALEC_1.clovek + 1) - 1));
+    $("#drugi-igralec").val(String((IGRALCI.IGRALEC_2.clovek + 1) - 1));
 }
