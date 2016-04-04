@@ -9,14 +9,39 @@ function AI(globina, mreza, hevristika, nastavitve){
     this.algoritem = alphabeta;
     this.algoritem.dodaj_hevristiko(this.hevristika);
     this.algoritem.dodaj_igro(this);
+    this.nastavitve = nastavitve; // Za WebWorkerje
 }
 
 
-function AIMreza(visina, sirina, mreza, v_vrsto, na_potezi){
+AI.iz_shranjene = function (podatki) {
+
+    var hevr = Hevristika.iz_shranjene(podatki.hevristika);
+
+    var temp_mreza = AIMreza.iz_shranjene(podatki.aiMreza);
+
+    var temp = new AI(podatki.globina, podatki.aiMreza.mreza, hevr, podatki.nastavitve);
+    temp.aiMreza = temp_mreza;
+    temp.algoritem = ALGORITMI[podatki.algoritem.id];
+    temp.algoritem.dodaj_igro(temp);
+
+    //console.log(temp.aiMreza);
+
+    //console.log("v ai", temp.dobi_trenutnega_igralca());
+    //console.log("v ai", temp.aiMreza.na_potezi);
+
+    return temp;
+
+};
+
+function AIMreza(visina, sirina, mreza, v_vrsto, na_potezi, poteze){
     this.visina = visina;
     this.sirina = sirina;
     this.v_vrsto = v_vrsto;
-    this.poteze = [];
+    if(poteze === undefined){
+        this.poteze = [];
+    }else{
+        this.poteze = poteze;
+    }
     this.na_potezi = na_potezi;
     this.koncano = STANJE.NE_KONCANO;
     this.zmagovalec = undefined;
@@ -28,12 +53,38 @@ function AIMreza(visina, sirina, mreza, v_vrsto, na_potezi){
 
 }
 
+AIMreza.iz_shranjene = function (podatki) {
+    var mreza = new AIMreza(podatki.visina, podatki.sirina, podatki.mreza, podatki.v_vrsto,
+        podatki.na_potezi, podatki.poteze);
+
+    mreza.na_potezi = IGRALCI.IGRALCI[mreza.na_potezi.id];
+
+    // Popravimo se mrezo
+    var nova_mreza = [];
+    for(var i=0; i < mreza.sirina; i++){
+        var temp = [];
+        nova_mreza.push(temp);
+        for(var j = 0; j < mreza.visina; j++){
+            temp.push(IGRALCI.IGRALCI[podatki.mreza[i][j].id]);
+        }
+    }
+    mreza.mreza = nova_mreza;
+
+    return mreza;
+};
+
 function Hevristika(tockovanje, sirina, visina, v_vrsto){
     this.tockovanje = tockovanje;
     this.sirina = sirina;
     this.visina = visina;
     this.v_vrsto = v_vrsto;
 }
+
+Hevristika.iz_shranjene = function (podatki) {
+
+    return new Hevristika(podatki.tockovanje, podatki.sirina, podatki.visina, podatki.v_vrsto);
+
+};
 
 Hevristika.prototype.kaznuj_globino = function (globina, maximiziramo) {
     // Neumni nacin, linearno
@@ -532,10 +583,8 @@ AI.prototype.dobi_veljavne_poteze = function(){
 };
 
 AI.prototype.najboljsa_poteza = function() {
-    var igralec = this.dobi_trenutnega_igralca();
-    this.maksimizirani_igralec = igralec;
+    this.maksimizirani_igralec = this.dobi_trenutnega_igralca();
     var najbolsa_poteza = this.algoritem.najboljsa_poteza();
-    console.log("optimalna", najbolsa_poteza);
     if(najbolsa_poteza.stolpec == null){
         return this.aiMreza.najdi_potezo(); // Random
     }
