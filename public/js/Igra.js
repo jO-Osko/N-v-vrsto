@@ -94,14 +94,19 @@ Igra.prototype.opravi_potezo = function(vrstica, stolpec, animacija){
     var zmaga = this.preveri_zmago(stolpec, vrstica, this.na_potezi);
     if(zmaga !== null){
         this.koncano = STANJE.KONCANO;
-        this.narisi_zmago(zmaga)
+        this.narisi_zmago(zmaga);
+        this.prikazi_zmagovalca();
+    }else{
+        this.zamenjaj_igralca();
     }
-
-    this.zamenjaj_igralca();
 
 };
 
 Igra.prototype.igraj = function(stolpec){
+    if(this.koncano == STANJE.KONCANO){ // Samo za vsak slucaj, uporabnik nacelome ne more klikniti na mrezo,
+        // ker se prikaze zmaga
+        return;
+    }
     try{
         var vrstica = this.izracunaj_potezo(stolpec);
         var igralec = this.na_potezi;
@@ -133,6 +138,11 @@ Igra.prototype.prikazi_naslednjega_igralca = function () {
     this.prikaz_igralca.text(this.na_potezi.ime + " (" + ((this.na_potezi.clovek) ? "človek": "računalnik") + ")")
 
 };
+
+Igra.prototype.prikazi_zmagovalca = function () {
+    this.prikaz_igralca.text("Zmagovalec: " + this.na_potezi.ime + " (" + ((this.na_potezi.clovek) ? "človek": "računalnik") + ")")
+};
+
 
 Igra.prototype.prikazi_potezo = function(stolpec){
     this.kazalci[stolpec].prikazi_potezo(this.na_potezi, this.je_poteza_veljavna(stolpec));
