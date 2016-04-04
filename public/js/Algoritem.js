@@ -108,7 +108,7 @@ Minimax.prototype.minimax = function(maksimiramo, globina){
 
     if(globina == 0){
         return new OptimalnaPoteza(null, this.hevristika.oceni_plosco(this.igra.dobi_mrezo(),
-            this.igra.dobi_trenutnega_igralca()), null);
+            this.igra.dobi_trenutnega_igralca()));
     }
 
     if(maksimiramo){
@@ -230,7 +230,7 @@ AlphaBeta.prototype.alphabeta_poteza = function(maksimiramo, globina, alpha, bet
 
     if(globina == 0){
         return new OptimalnaPoteza(null, this.hevristika.oceni_plosco(this.igra.dobi_mrezo(),
-            this.igra.dobi_trenutnega_igralca()), null);
+            this.igra.dobi_trenutnega_igralca()));
     }
 
     if(maksimiramo){
