@@ -51,6 +51,8 @@ function AIMreza(visina, sirina, mreza, v_vrsto, na_potezi, poteze){
         this.mreza = mreza;
     }
 
+    this.preostale_poteze = sirina * visina;
+
 }
 
 AIMreza.iz_shranjene = function (podatki) {
@@ -450,6 +452,12 @@ AIMreza.prototype.opravi_potezo = function(vrstica, stolpec){
         return zmaga;
     }
 
+    this.preostale_poteze--;
+    if(this.preostale_poteze == 0){
+        this.koncano = STANJE.REMI;
+        this.zmagovalec = IGRALCI.NE_ODIGRANO;
+    }
+
     this.zamenjaj_igralca();
     return false;
 };
@@ -557,6 +565,7 @@ AIMreza.prototype.poteza_nazaj = function(){
     var zadnja = this.poteze.pop();
     this.na_potezi = zadnja.igralec;
     this.mreza[zadnja.stolpec][zadnja.vrstica] = IGRALCI.NE_ODIGRANO;
+    this.preostale_poteze--;
 
     this.koncano = STANJE.NE_KONCANO; //ne mormo igrt po tem k je enkrat ze konc
     this.zmagovalec = IGRALCI.NE_ODIGRANO; // Ponastavimo zmagovalca nazaj

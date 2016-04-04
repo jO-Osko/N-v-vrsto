@@ -53,6 +53,8 @@ function Igra(html_mreza, kazalci, visina, sirina, v_vrsto, prikaz_igralca, nast
     this.prikaz_igralca = prikaz_igralca;
     this.nastavitve = nastavitve;
 
+    this.preostale_poteze = visina * sirina;
+
     this.AI = new AI(nastavitve.globina || 10, undefined, new Hevristika(HEVRISTIKA.TOCKOVANJE, sirina, visina, v_vrsto), {visina:this.visina, sirina:this.sirina,
         v_vrsto:this.v_vrsto, na_potezi:this.na_potezi});  // AI je v igri
     
@@ -100,6 +102,12 @@ Igra.prototype.opravi_potezo = function(vrstica, stolpec, animacija){
         this.zamenjaj_igralca();
     }
 
+    this.preostale_poteze--;
+    if(this.preostale_poteze == 0){
+        this.koncano = STANJE.REMI;
+        this.prikazi_zmagovalca();
+    }
+
 };
 
 Igra.prototype.igraj = function(stolpec){
@@ -140,7 +148,11 @@ Igra.prototype.prikazi_naslednjega_igralca = function () {
 };
 
 Igra.prototype.prikazi_zmagovalca = function () {
-    this.prikaz_igralca.text("Zmagovalec: " + this.na_potezi.ime + " (" + ((this.na_potezi.clovek) ? "človek": "računalnik") + ")")
+    if(this.koncano == STANJE.REMI){
+        this.prikaz_igralca.text("Igra se je končala brez zmagovalca")
+    }else{
+        this.prikaz_igralca.text("Zmagovalec: " + this.na_potezi.ime + " (" + ((this.na_potezi.clovek) ? "človek": "računalnik") + ")")
+    }
 };
 
 

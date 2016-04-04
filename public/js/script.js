@@ -76,7 +76,7 @@ function naredi_plosco(sirina, visina, v_vrsto){
                         return
                     }
 
-                    if(glavna_igralna_plosca.koncano == STANJE.KONCANO){
+                    if(glavna_igralna_plosca.koncano != STANJE.NE_KONCANO){
                         alert("Igra je ze koncana, igranje ni vec smiselno");
                         return;
                     }
