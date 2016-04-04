@@ -23,7 +23,6 @@ self.addEventListener('message', function(event) {
 
 
 
-function ustavi(){
+function ustavi() {
     self.close();
-    console.log("STOP");
 }

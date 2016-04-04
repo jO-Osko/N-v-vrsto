@@ -1,4 +1,4 @@
-function naredi_plosco(sirina, visina, v_vrsto){
+function naredi_plosco(sirina, visina, v_vrsto) {
     var html_igralna_plosca = $("<table>", {class:"igralna-plosca", id:"glavna-igralna-plosca"});
 
     var mreza = [];
@@ -68,10 +68,10 @@ function naredi_plosco(sirina, visina, v_vrsto){
     $("#plosca-kazalcev").replaceWith(tabela_kazalcev);
     $("#glavna-igralna-plosca").replaceWith(html_igralna_plosca);
     $("#igraj-AI").bind("click.igraj-potezo",
-        function(){
+        function() {
             var racunamo = false;
             return (
-                function(){ // Funkcijo naredimo, da se ohrani vrednost racunamo
+                function() { // Funkcijo naredimo, da se ohrani vrednost racunamo
                     if(racunamo){ // Ce ze racunamo novo potezo pocakamo, da se ta del konca.
                         return
                     }
@@ -81,7 +81,7 @@ function naredi_plosco(sirina, visina, v_vrsto){
                     }
                     racunamo = true;
 
-                    function procesiraj_potezo(poteza){
+                    function procesiraj_potezo(poteza) {
                         if(glavna_igralna_plosca.na_potezi.clovek){ // Namig
                             var vrstica = glavna_igralna_plosca.izracunaj_potezo(poteza);
                             glavna_igralna_plosca.animiraj_potezo(poteza, vrstica, glavna_igralna_plosca.na_potezi, true);
@@ -120,7 +120,12 @@ function naredi_plosco(sirina, visina, v_vrsto){
     //noinspection JSJQueryEfficiency
     glavna_igralna_plosca.igraj_avtomatsko = $("#autoplay-ai").prop("checked");
 
-    g = glavna_igralna_plosca;
+    // Za lazjo dodatno uporabo igre si na nek nacin exportajmo glavno igralno plosco, normalni uporabnik tega ne bo
+    // zaznal, marsikdo pa se bo zaradi tega lazje igral na svoj nacin (po svoje je to varnostna luknja, saj s tem
+    // dovolimo uporabniku posegati v igro, a s tem ravno ta pridobi car).
+    if(!HOCEMO_NAREDITI_IGRO_BOLJ_VARNO){
+        globalna_glavna_igralna_plosca = glavna_igralna_plosca;
+    }
 
     glavna_igralna_plosca.prikazi_naslednjega_igralca();
 
@@ -133,5 +138,4 @@ function naredi_plosco(sirina, visina, v_vrsto){
         glavna_igralna_plosca.igraj_avtomatsko = this.prop("checked");
     })
 }
-
-var g;
+var globalna_glavna_igralna_plosca;

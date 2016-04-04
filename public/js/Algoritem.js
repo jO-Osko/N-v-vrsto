@@ -362,6 +362,6 @@ var nakljucno = new Nakljucno(0, "Nakljucno", null, null);
 
 var minimax = new Minimax(1,"MiniMax", null, null, 4);
 
-var alphabeta = new AlphaBeta(2, "Alpha-Beta", null, null, 8);
+var alphabeta = new AlphaBeta(2, "Alpha-Beta", null, null, 6);
 
 ALGORITMI = [nakljucno, minimax, alphabeta];

@@ -1,17 +1,15 @@
-function IgralnaCelica(html_celica, zacetni_igralec){
+function IgralnaCelica(html_celica, zacetni_igralec) {
     this.html_celica = html_celica;
     this.igralec = zacetni_igralec;
     this.spremeni_barvo();
 }
 
-
-IgralnaCelica.prototype.odigraj_potezo = function (nov_igralec, animacija){
+IgralnaCelica.prototype.odigraj_potezo = function (nov_igralec, animacija) {
     this.igralec = nov_igralec;
     if(!animacija){
         this.spremeni_barvo();
     }
 };
-
 
 IgralnaCelica.prototype.spremeni_barvo = function (igralec) {
     this.html_celica.attr("class", "");
@@ -27,7 +25,7 @@ function KazalcnaCelica(html_celica){
     this.html_celica = html_celica;
 }
 
-KazalcnaCelica.prototype.prikazi_potezo = function (igralec, veljavnost){
+KazalcnaCelica.prototype.prikazi_potezo = function (igralec, veljavnost) {
     this.html_celica.attr("class", "");
     if(!veljavnost){
         this.html_celica.addClass("neveljavna");
@@ -35,7 +33,7 @@ KazalcnaCelica.prototype.prikazi_potezo = function (igralec, veljavnost){
     this.html_celica.addClass(igralec.html_razred_barve);
 };
 
-KazalcnaCelica.prototype.skrij_potezo = function (){
+KazalcnaCelica.prototype.skrij_potezo = function () {
     this.html_celica.attr("class", "");
 };
 
@@ -60,7 +58,7 @@ function Igra(html_mreza, kazalci, visina, sirina, v_vrsto, prikaz_igralca, nast
     
 }
 
-Igra.prototype.najboljsa_poteza = function(){
+Igra.prototype.najboljsa_poteza = function() {
     return this.AI.najboljsa_poteza(this.na_potezi);
 };
 
@@ -72,7 +70,7 @@ Igra.prototype.je_poteza_veljavna = function (stolpec) {
 };
 
 
-Igra.prototype.izracunaj_potezo = function(poteza){
+Igra.prototype.izracunaj_potezo = function(poteza) {
     if(this.je_poteza_veljavna(poteza)){
         for(var i = 0; i < this.visina; i++){
             if(this.html_mreza[poteza][i].igralec != IGRALCI.NE_ODIGRANO){
@@ -87,7 +85,7 @@ Igra.prototype.izracunaj_potezo = function(poteza){
 
 };
 
-Igra.prototype.opravi_potezo = function(vrstica, stolpec, animacija){
+Igra.prototype.opravi_potezo = function(vrstica, stolpec, animacija) {
     var poteza = new Poteza(vrstica, stolpec, this.na_potezi);
     this.poteze.push(poteza);
 
@@ -110,7 +108,7 @@ Igra.prototype.opravi_potezo = function(vrstica, stolpec, animacija){
 
 };
 
-Igra.prototype.igraj = function(stolpec){
+Igra.prototype.igraj = function(stolpec) {
     if(this.koncano != STANJE.NE_KONCANO){ // Samo za vsak slucaj, uporabnik nacelome ne more klikniti na mrezo,
         // ker se prikaze zmaga
         return;
@@ -135,7 +133,7 @@ Igra.prototype.igraj = function(stolpec){
 };
 
 
-Igra.prototype.zamenjaj_igralca = function(){
+Igra.prototype.zamenjaj_igralca = function() {
     //Za 2 igralca je to dovolj
     if(this.na_potezi == IGRALCI.IGRALEC_1){
         this.na_potezi = IGRALCI.IGRALEC_2;
@@ -162,17 +160,17 @@ Igra.prototype.prikazi_zmagovalca = function () {
 };
 
 
-Igra.prototype.prikazi_potezo = function(stolpec){
+Igra.prototype.prikazi_potezo = function(stolpec) {
     this.kazalci[stolpec].prikazi_potezo(this.na_potezi, this.je_poteza_veljavna(stolpec));
 };
 
-Igra.prototype.skrij_potezo = function(stolpec){
+Igra.prototype.skrij_potezo = function(stolpec) {
     this.kazalci[stolpec].skrij_potezo();
 };
 
 
 // Igralca potrebujemo zaradi animacije
-Igra.prototype.preveri_zmago = function(stolpec, vrstica, igralec){
+Igra.prototype.preveri_zmago = function(stolpec, vrstica, igralec) {
     return(
         this.preveri_zmago_vertikalno(stolpec, vrstica, igralec) ||
 
@@ -191,7 +189,7 @@ Igra.prototype.preveri_zmago = function(stolpec, vrstica, igralec){
  * @param {Igralec} igralec
  * @return {Zmaga} Nacin zmage
  */
-Igra.prototype.preveri_zmago_vertikalno = function(stolpec, vrstica, igralec){
+Igra.prototype.preveri_zmago_vertikalno = function(stolpec, vrstica, igralec) {
     // gor-dol
     var sprememba_visine = 1;
     for(var dy_gor = 1; (vrstica - dy_gor >= 0) && (this.html_mreza[stolpec][vrstica - dy_gor].igralec == igralec) && ++sprememba_visine; ++dy_gor){} // Doda 1 prevec
@@ -204,7 +202,7 @@ Igra.prototype.preveri_zmago_vertikalno = function(stolpec, vrstica, igralec){
     return null;
 };
 
-Igra.prototype.preveri_zmago_horizontalno = function(stolpec, vrstica, igralec){
+Igra.prototype.preveri_zmago_horizontalno = function(stolpec, vrstica, igralec) {
     // levo-desno
     var sprememba_sirine = 1;
     for(var dx_levo = 1; (stolpec - dx_levo >= 0) && (this.html_mreza[stolpec - dx_levo][vrstica].igralec == igralec) && ++sprememba_sirine; ++dx_levo){} // Doda 1 prevec
@@ -248,7 +246,7 @@ Igra.prototype.dobi_kordinate_centra_celice = function (tocka) {
     return [x,y];
 };
 
-Igra.prototype.narisi_zmago = function(zmaga){
+Igra.prototype.narisi_zmago = function(zmaga) {
     var glavna_plosca = $("#glavna-igralna-plosca");
     var visina_tabele = glavna_plosca.outerHeight();
     var sirina_tabele = glavna_plosca.outerWidth();
@@ -274,7 +272,7 @@ Igra.prototype.narisi_zmago = function(zmaga){
     context.stroke();
 };
 
-Igra.prototype.poteza_nazaj = function(){
+Igra.prototype.poteza_nazaj = function() {
     var zadnja = this.poteze.pop();
     this.na_potezi = zadnja.igralec;
 
@@ -285,7 +283,7 @@ Igra.prototype.poteza_nazaj = function(){
 
 };
 
-Igra.prototype.animiraj_potezo = function(stolpec, vrstica, trenutni_igralec, je_namig){
+Igra.prototype.animiraj_potezo = function(stolpec, vrstica, trenutni_igralec, je_namig) {
     var time_lapse = 50;
     var trenutna_vrstica = 0;
 

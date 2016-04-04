@@ -1,6 +1,8 @@
-function Igralec(id, ime, barva, clovek){
+function Igralec(id, ime, barva, clovek) {
     this.id = id;
     this.ime = ime;
+    // Pustimo si clovesko breljivo barvo, cetudi se nikjer direktno ne uporabi
+    //noinspection JSUnusedGlobalSymbols
     this.barva = barva;
     this.html_razred_barve = barva.toString();
     this.clovek = clovek
@@ -29,36 +31,42 @@ HEVRISTIKA.TOCKOVANJE.REMI = 0;
 HEVRISTIKA.TOCKOVANJE.KAZEN_NA_GLOBINO_MAX = -1;
 HEVRISTIKA.TOCKOVANJE.KAZEN_NA_GLOBINO_MIN = HEVRISTIKA.TOCKOVANJE.KAZEN_NA_GLOBINO_MAX;
 
-function NeveljavnaPoteza(sporocilo){
+NESKONCNO = Math.pow(10,9);
+
+
+function NeveljavnaPoteza(sporocilo) {
+    // Pustimo si podatke, pri odpravljanju napak ridejo se kako prav
+    //noinspection JSUnusedGlobalSymbols
     this.sporocilo = sporocilo;
+    //noinspection JSUnusedGlobalSymbols
     this.ime_napake = "Neveljavna Poteza";
 }
 
 
-function Poteza(vrstica, stolpec, igralec){
+function Poteza(vrstica, stolpec, igralec) {
     this.vrstica = vrstica;
     this.stolpec = stolpec;
     this.igralec =  igralec;
 
 }
 
-function OptimalnaPoteza(stolpec, ocena, igralec){
+function OptimalnaPoteza(stolpec, ocena, igralec) {
     this.stolpec = stolpec;
     this.ocena = ocena;
     this.igralec = igralec;
 }
 
-function Zmaga(x_1, y_1, x_2, y_2){
+function Zmaga(x_1, y_1, x_2, y_2) {
     this.zacetek = new Tocka(x_1, y_1);
     this.konec = new Tocka(x_2, y_2);
 }
 
-function Tocka(x,y){
+function Tocka(x,y) {
     this.x = x;
     this.y = y;
 }
 
-function Nastavitve(visina_celice, sirina_celice, obloga /*padding*/, meja){
+function Nastavitve(visina_celice, sirina_celice, obloga /*padding*/, meja) {
     this.visina_celice = visina_celice || 60;
     this.sirina_celice = sirina_celice || 60;
     this.obloga = obloga || 10;
@@ -69,11 +77,10 @@ function Nastavitve(visina_celice, sirina_celice, obloga /*padding*/, meja){
 
 function OcenaHevristika(igralec, dolzina) {    
     this.igralec = igralec;
-    this.dolzina = dolzina;    
-    
+    this.dolzina = dolzina;
 }
 
-OcenaHevristika.prototype.dobi_vrednost = function(){
+OcenaHevristika.prototype.dobi_vrednost = function() {
     return Math.pow(10, this.dolzina);
 };
 
@@ -88,7 +95,7 @@ function premesaj_seznam(seznam) {
     }
 }
 
-function igraj_ai(){
+function igraj_ai() {
     setTimeout(
         function(){
             $("#igraj-AI").trigger("click");
