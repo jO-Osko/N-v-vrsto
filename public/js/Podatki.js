@@ -12,6 +12,7 @@ IGRALCI.IGRALEC_2 = new Igralec(2, "Igralec 2", "rdeca", false);
 IGRALCI.NE_ODIGRANO = new Igralec(0, "Narava", "bela");
 IGRALCI.DEFUALT = IGRALCI.IGRALEC_1;
 
+IGRALCI.IGRALCI = [IGRALCI.NE_ODIGRANO, IGRALCI.IGRALEC_1, IGRALCI.IGRALEC_2];
 
 STANJE = {};
 STANJE.KONCANO = 1;
@@ -67,7 +68,6 @@ function Nastavitve(visina_celice, sirina_celice, obloga /*padding*/, meja){
 
 function OcenaHevristika(igralec, dolzina) {    
     this.igralec = igralec;
-    this.vrednost = null;
     this.dolzina = dolzina;    
     
 }
