@@ -111,7 +111,7 @@ Igra.prototype.opravi_potezo = function(vrstica, stolpec, animacija){
 };
 
 Igra.prototype.igraj = function(stolpec){
-    if(this.koncano == STANJE.KONCANO){ // Samo za vsak slucaj, uporabnik nacelome ne more klikniti na mrezo,
+    if(this.koncano != STANJE.NE_KONCANO){ // Samo za vsak slucaj, uporabnik nacelome ne more klikniti na mrezo,
         // ker se prikaze zmaga
         return;
     }
@@ -121,6 +121,12 @@ Igra.prototype.igraj = function(stolpec){
         this.opravi_potezo(vrstica, stolpec, true);
         this.animiraj_potezo(stolpec, vrstica, igralec);
         this.AI.igraj(stolpec);
+        if(this.koncano == STANJE.NE_KONCANO){
+            if(!this.na_potezi.clovek && this.igraj_avtomatsko){
+                igraj_ai();
+            }
+        }
+
     }
     catch (e){
         throw e;

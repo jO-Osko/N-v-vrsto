@@ -71,31 +71,24 @@ function naredi_plosco(sirina, visina, v_vrsto){
         function(){
             var racunamo = false;
             return (
-                function(){
+                function(){ // Funkcijo naredimo, da se ohrani vrednost racunamo
                     if(racunamo){ // Ce ze racunamo novo potezo pocakamo, da se ta del konca.
                         return
                     }
-
                     if(glavna_igralna_plosca.koncano != STANJE.NE_KONCANO){
                         alert("Igra je ze koncana, igranje ni vec smiselno");
                         return;
                     }
-
                     racunamo = true;
 
                     function procesiraj_potezo(poteza){
                         if(glavna_igralna_plosca.na_potezi.clovek){ // Namig
-
                             var vrstica = glavna_igralna_plosca.izracunaj_potezo(poteza);
-
                             glavna_igralna_plosca.animiraj_potezo(poteza, vrstica, glavna_igralna_plosca.na_potezi, true);
-
                             glavna_igralna_plosca.prikazi_potezo(poteza); // To zgleda malo cudno
-
                         }else{
                             glavna_igralna_plosca.igraj(poteza);
                         }
-
                         racunamo = false;
 
                     }
@@ -107,8 +100,8 @@ function naredi_plosco(sirina, visina, v_vrsto){
                         delavec.postMessage({ai:glavna_igralna_plosca.AI, navodilo:"NAJDI POTEZO", na_potezi:glavna_igralna_plosca.na_potezi});
 
                         delavec.addEventListener('message', function(event) {
-                            console.log(event.data);
-                            procesiraj_potezo(event.data)
+                            procesiraj_potezo(event.data);
+                            delavec.postMessage({navodilo:"USTAVI"});
                         }, false);
                     } else {
                         var poteza = glavna_igralna_plosca.najboljsa_poteza();
@@ -123,6 +116,10 @@ function naredi_plosco(sirina, visina, v_vrsto){
 
     var glavna_igralna_plosca = new Igra(mreza, kazalci, visina, sirina, v_vrsto, $("#na-potezi"), new Nastavitve(60,60));
 
+    // Namenoma dvakrat zahtevamo element (ali pa si podefiniramo novo spremenljivko, skoraj brez pomena)
+    //noinspection JSJQueryEfficiency
+    glavna_igralna_plosca.igraj_avtomatsko = $("#autoplay-ai").prop("checked");
+
     g = glavna_igralna_plosca;
 
     glavna_igralna_plosca.prikazi_naslednjega_igralca();
@@ -131,8 +128,9 @@ function naredi_plosco(sirina, visina, v_vrsto){
                         // parseInt(true) == Nan, true + 1 = 2, WTF javascript
     $("#prvi-igralec").val(String((IGRALCI.IGRALEC_1.clovek + 1) - 1));
     $("#drugi-igralec").val(String((IGRALCI.IGRALEC_2.clovek + 1) - 1));
+    //noinspection JSJQueryEfficiency
     $("#autoplay-ai").change(function () {
-        glavna_igralna_plosca.igraj_avtomatsko = this.checked;
+        glavna_igralna_plosca.igraj_avtomatsko = this.prop("checked");
     })
 }
 

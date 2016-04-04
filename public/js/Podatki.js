@@ -87,3 +87,12 @@ function premesaj_seznam(seznam) {
         seznam[j] = temp;
     }
 }
+
+function igraj_ai(){
+    setTimeout(
+        function(){
+            $("#igraj-AI").trigger("click");
+        },
+        100
+    ); // Da se vsi eventi pomirijo
+}
