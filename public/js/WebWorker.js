@@ -1,6 +1,6 @@
 // WebWorker (spletni delavec), ki najboljso potezo preracuna v ozadju
 
-importScripts("Igra.js", "Podatki.js", "AI.js", "Algoritem.js");
+importScripts("Igra.js", "Podatki.js", "AI.js", "Algoritem.js", "Hevristika.js");
 
 self.addEventListener('message', function(event) {
     var podatki = event.data;
