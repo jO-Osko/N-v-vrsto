@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <title>N v vrsto</title >
+  <meta charset="utf-8"/>
+  <title>N v vrsto</title>
   <meta name="author" content="Filip Koprivec, Gašper Domen Romih">
   <link rel="stylesheet" href="public/css/style.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -18,7 +18,7 @@
 
 <body>
 <div id="wrapper">
-  <div class="center">
+  <div class="sredinsko">
     <h1>N v vrsto</h1>
   </div>
   <div id="glavna-plosca">
@@ -26,9 +26,10 @@
     </div>
     <div id="glavna-igralna-plosca">
     </div>
-    <div id="bottom">
+    <div id="dno">
       <div id="nastavitve" style="float: left">
         <h2 onclick="$('#pod-nastavitve').toggle(500)">Nastavitve</h2>
+
         <div id="pod-nastavitve">
           <label for="sirina-plosce">
             Širina plošče
@@ -61,17 +62,18 @@
         </div>
 
       </div>
-      <div id="game-info" style="float:right">
+      <div id="informacije-o-igri" style="float:right">
         <h2>Na potezi</h2>
+
         <p id="na-potezi">Človek (modra)</p>
       </div>
       <div id="igralne-nastavitve" style="margin-left: auto; margin-right: auto; text-align: center">
         <h2>Ponovno igraj</h2>
-        <button id="restart-game-button" type="button"  class="btn btn-default">Ponovno igraj</button>
+        <button id="ponovno-igraj-igro" type="button" class="btn btn-default">Ponovno igraj</button>
         <button id="igraj-AI" type="button" class="btn btn-default">Nasvet/igraj računalnik</button>
         <br>
-        <label for="autoplay-ai">Avtomatsko igraj računalnik</label>
-        <input type="checkbox" id="autoplay-ai" name="">
+        <label for="avtomatsko-igraj-ai">Avtomatsko igraj računalnik</label>
+        <input type="checkbox" id="avtomatsko-igraj-ai" name="">
       </div>
     </div>
 
@@ -80,22 +82,21 @@
 </div>
 
 
-
 <script>
-  $("#restart-game-button").click(
-    function restart_game(){
-      var visina = parseInt($("#visina-plosce").val());
-      var sirina = parseInt($("#sirina-plosce").val());
-      var v_vrsto = parseInt($("#v-vrsto").val());
-      var prvi_clovek = parseInt($("#prvi-igralec").val());
-      IGRALCI.IGRALEC_1.clovek = Boolean(prvi_clovek);
-      var drugi_clovek = parseInt($("#drugi-igralec").val());
-      IGRALCI.IGRALEC_2.clovek = Boolean(drugi_clovek);
-      $("#zmagovalno-platno").remove();
-      $("#igraj-AI").unbind("click.igraj-potezo");
-      naredi_plosco(sirina, visina, v_vrsto);
-    });
-  naredi_plosco(10,7,4);
+  $("#ponovno-igraj-igro").click(
+          function restart_game() {
+            var visina = parseInt($("#visina-plosce").val());
+            var sirina = parseInt($("#sirina-plosce").val());
+            var v_vrsto = parseInt($("#v-vrsto").val());
+            var prvi_clovek = parseInt($("#prvi-igralec").val());
+            IGRALCI.IGRALEC_1.clovek = Boolean(prvi_clovek);
+            var drugi_clovek = parseInt($("#drugi-igralec").val());
+            IGRALCI.IGRALEC_2.clovek = Boolean(drugi_clovek);
+            $("#zmagovalno-platno").remove();
+            $("#igraj-AI").unbind("click.igraj-potezo");
+            naredi_plosco(sirina, visina, v_vrsto);
+          });
+  naredi_plosco(10, 7, 4);
 </script>
 </body>
 

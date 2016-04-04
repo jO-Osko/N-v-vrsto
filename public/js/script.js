@@ -133,12 +133,13 @@ function naredi_plosco(sirina, visina, v_vrsto) {
     );
 
     // Koncno smo pripravljeni, da kreiramo objekt glavne igre
+    //noinspection JSCheckFunctionSignatures
     var glavna_igralna_plosca = new Igra(mreza, kazalci, visina, sirina, v_vrsto, $("#na-potezi"),
         new Nastavitve(60,60));
 
     // Namenoma dvakrat zahtevamo element (ali pa si podefiniramo novo spremenljivko, skoraj brez pomena)
     //noinspection JSJQueryEfficiency
-    glavna_igralna_plosca.igraj_avtomatsko = $("#autoplay-ai").prop("checked");
+    glavna_igralna_plosca.igraj_avtomatsko = $("#avtomatsko-igraj-ai").prop("checked");
 
     // Za lazjo dodatno uporabo igre si na nek nacin exportajmo glavno igralno plosco, normalni uporabnik tega ne bo
     // zaznal, marsikdo pa se bo zaradi tega lazje igral na svoj nacin (po svoje je to varnostna luknja, saj s tem
@@ -156,7 +157,7 @@ function naredi_plosco(sirina, visina, v_vrsto) {
     $("#prvi-igralec").val(String((IGRALCI.IGRALEC_1.clovek + 1) - 1));
     $("#drugi-igralec").val(String((IGRALCI.IGRALEC_2.clovek + 1) - 1));
     //noinspection JSJQueryEfficiency
-    $("#autoplay-ai").change(function () {
+    $("#avtomatsko-igraj-ai").change(function () {
         glavna_igralna_plosca.igraj_avtomatsko = this.prop("checked");
     })
 }
