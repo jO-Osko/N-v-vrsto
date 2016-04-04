@@ -1,7 +1,7 @@
 // Osnovni interface za odlocitveni algoritem
 
 /**
- *
+ * @param id Id algoritma, pomembno za rekonstrukcijo ob serializaciji v WebWorkerju
  * @param ime Ime algoritma
  * @param igra Kot Igra obnasajoc se objekt, implementirati mora: Igra.dobi_veljavne_poteze() (vrne veljavne poteze),
  * Igra.igraj(poteza) (odigra potezo), Igra.poteza_nazaj() (razveljavi potezo), Igra.dobi_stanje() (vrne stanje igre),
@@ -15,7 +15,8 @@
  * @constructor
  */
 
-function AIAlgoritem(ime, igra, hevristika){
+function AIAlgoritem(id, ime, igra, hevristika){
+    this.id = id;
     this.ime = ime;
     this.igra = igra;
     this.hevristika = hevristika;
@@ -33,18 +34,44 @@ AIAlgoritem.prototype.dodaj_hevristiko = function (hevristika) {
     this.hevristika = hevristika;
 };
 
+// Dedovanje
+Nakljucno.prototype = new AIAlgoritem();
+Nakljucno.prototype.constructor = Nakljucno;
+Nakljucno.prototype.super = AIAlgoritem.prototype;
+
+function Nakljucno(id, ime, igra, hevristika){
+    this.super.constructor.call(this, id, ime, igra, hevristika);
+
+    // Ponovitev kode od iz konstruktorja, samo zato, da WebStorm ve katere atribte ima objekt
+    //noinspection ConstantIfStatementJS
+    if(false) {
+        this.id = id;
+        this.ime = ime;
+        this.igra = igra;
+        this.hevristika = hevristika;
+    }
+    // Konec ponovitve konstruktorja
+}
+
+Nakljucno.prototype.najboljsa_poteza = function(){
+    var veljavne_poteze = this.igra.dobi_veljavne_poteze();
+    return new OptimalnaPoteza(veljavne_poteze[Math.floor(Math.random() * veljavne_poteze.length)], 0,
+        this.igra.dobi_trenutnega_igralca());
+};
+
 
 // Dedovanje
 Minimax.prototype = new AIAlgoritem();
 Minimax.prototype.constructor = Minimax;
 Minimax.prototype.super = AIAlgoritem.prototype;
 
-function Minimax(ime, igra, hevristika, globina){
-    this.super.constructor.call(this, ime, igra, hevristika);
+function Minimax(id, ime, igra, hevristika, globina){
+    this.super.constructor.call(this, id, ime, igra, hevristika);
 
     // Ponovitev kode od iz konstruktorja, samo zato, da WebStorm ve katere atribte ima objekt
     //noinspection ConstantIfStatementJS
     if(false) {
+        this.id = id;
         this.ime = ime;
         this.igra = igra;
         this.hevristika = hevristika;
@@ -159,12 +186,13 @@ AlphaBeta.prototype = new AIAlgoritem();
 AlphaBeta.prototype.constructor = AlphaBeta;
 AlphaBeta.prototype.super = AIAlgoritem.prototype;
 
-function AlphaBeta(ime, igra, hevristika, globina){
-    this.super.constructor.call(this, ime, igra, hevristika);
+function AlphaBeta(id, ime, igra, hevristika, globina){
+    this.super.constructor.call(this, id, ime, igra, hevristika);
 
     // Ponovitev kode od iz konstruktorja, samo zato, da WebStorm ve katere atribte ima objekt
     //noinspection ConstantIfStatementJS
     if(false) {
+        this.id = id;
         this.ime = ime;
         this.igra = igra;
         this.hevristika = hevristika;
@@ -330,8 +358,10 @@ AlphaBeta.prototype.alphabeta_minimiziraj = function (globina, alpha, beta) {
     return optimalna_ocena + this.hevristika.kaznuj_globino(this.globina - globina, false);
 };
 
+var nakljucno = new Nakljucno(0, "Nakljucno", null, null);
 
+var minimax = new Minimax(1,"MiniMax", null, null, 4);
 
-var minimax = new Minimax("MiniMax", null, null, 4);
+var alphabeta = new AlphaBeta(2, "Alpha-Beta", null, null, 8);
 
-var alphabeta = new AlphaBeta("Alpha-Beta", null, null, 6);
+ALGORITMI = [nakljucno, minimax, alphabeta];
