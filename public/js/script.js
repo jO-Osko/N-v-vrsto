@@ -1,4 +1,4 @@
-function naredi_plosco(sirina, visina, v_vrsto, prvi_igralec){
+function naredi_plosco(sirina, visina, v_vrsto){
     var html_igralna_plosca = $("<table>", {class:"igralna-plosca", id:"glavna-igralna-plosca"});
 
     var mreza = [];
@@ -68,24 +68,62 @@ function naredi_plosco(sirina, visina, v_vrsto, prvi_igralec){
     $("#plosca-kazalcev").replaceWith(tabela_kazalcev);
     $("#glavna-igralna-plosca").replaceWith(html_igralna_plosca);
     $("#igraj-AI").bind("click.igraj-potezo",
-    function(){
-        if(glavna_igralna_plosca.na_potezi.clovek){ // Namig
-            var poteza = glavna_igralna_plosca.najboljsa_poteza();
+        function(){
+            var racunamo = false;
+            return (
+                function(){
+                    if(racunamo){ // Ce ze racunamo novo potezo pocakamo, da se ta del konca.
+                        return
+                    }
 
-            var vrstica = glavna_igralna_plosca.izracunaj_potezo(poteza);
+                    if(glavna_igralna_plosca.koncano == STANJE.KONCANO){
+                        alert("Igra je ze koncana, igranje ni vec smiselno");
+                        return;
+                    }
 
-            glavna_igralna_plosca.animiraj_potezo(poteza, vrstica, glavna_igralna_plosca.na_potezi, true);
+                    racunamo = true;
 
-            glavna_igralna_plosca.prikazi_potezo(poteza); // To zgleda malo cudno
+                    function procesiraj_potezo(poteza){
+                        if(glavna_igralna_plosca.na_potezi.clovek){ // Namig
 
-        }else{
-            poteza = glavna_igralna_plosca.najboljsa_poteza();
+                            var vrstica = glavna_igralna_plosca.izracunaj_potezo(poteza);
 
-            glavna_igralna_plosca.igraj(poteza);
-        }
-    });
+                            glavna_igralna_plosca.animiraj_potezo(poteza, vrstica, glavna_igralna_plosca.na_potezi, true);
+
+                            glavna_igralna_plosca.prikazi_potezo(poteza); // To zgleda malo cudno
+
+                        }else{
+                            glavna_igralna_plosca.igraj(poteza);
+                        }
+
+                        racunamo = false;
+
+                    }
+
+
+                    if(typeof(Worker) !== "undefined") {
+                        var delavec = new Worker("public/js/WebWorker.js");
+
+                        delavec.postMessage({ai:glavna_igralna_plosca.AI, navodilo:"NAJDI POTEZO", na_potezi:glavna_igralna_plosca.na_potezi});
+
+                        delavec.addEventListener('message', function(event) {
+                            console.log(event.data);
+                            procesiraj_potezo(event.data)
+                        }, false);
+                    } else {
+                        var poteza = glavna_igralna_plosca.najboljsa_poteza();
+                        procesiraj_potezo(poteza);
+                    }
+
+
+                }
+            )
+        }()
+    );
 
     var glavna_igralna_plosca = new Igra(mreza, kazalci, visina, sirina, v_vrsto, $("#na-potezi"), new Nastavitve(60,60));
+
+    g = glavna_igralna_plosca;
 
     glavna_igralna_plosca.prikazi_naslednjega_igralca();
 
@@ -93,4 +131,9 @@ function naredi_plosco(sirina, visina, v_vrsto, prvi_igralec){
                         // parseInt(true) == Nan, true + 1 = 2, WTF javascript
     $("#prvi-igralec").val(String((IGRALCI.IGRALEC_1.clovek + 1) - 1));
     $("#drugi-igralec").val(String((IGRALCI.IGRALEC_2.clovek + 1) - 1));
+    $("#autoplay-ai").change(function () {
+        glavna_igralna_plosca.igraj_avtomatsko = this.checked;
+    })
 }
+
+var g;
