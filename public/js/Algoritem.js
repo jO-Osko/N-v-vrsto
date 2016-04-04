@@ -107,8 +107,8 @@ Minimax.prototype.minimax = function(maksimiramo, globina){
     }
 
     if(globina == 0){
-        return new OptimalnaPoteza(null, this.hevristika.oceni_plosco(this.igra.dobi_mrezo(),
-            this.igra.dobi_trenutnega_igralca()));
+        return new OptimalnaPoteza(null, this.hevristika.oceni_plosco(this.igra.dobi_mrezo()),
+            this.igra.dobi_trenutnega_igralca());
     }
 
     if(maksimiramo){
