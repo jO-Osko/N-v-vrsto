@@ -158,7 +158,7 @@ function naredi_plosco(sirina, visina, v_vrsto) {
     $("#drugi-igralec").val(String((IGRALCI.IGRALEC_2.clovek + 1) - 1));
     //noinspection JSJQueryEfficiency
     $("#avtomatsko-igraj-ai").change(function () {
-        glavna_igralna_plosca.igraj_avtomatsko = this.prop("checked");
+        glavna_igralna_plosca.igraj_avtomatsko = $("#avtomatsko-igraj-ai").prop("checked");
     })
 }
 var globalna_glavna_igralna_plosca;

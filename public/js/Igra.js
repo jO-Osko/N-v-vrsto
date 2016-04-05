@@ -1,3 +1,4 @@
+"use strict";
 function IgralnaCelica(html_celica, zacetni_igralec) {
     this.html_celica = html_celica;
     this.igralec = zacetni_igralec;
@@ -55,7 +56,7 @@ function Igra(html_mreza, kazalci, visina, sirina, v_vrsto, prikaz_igralca, nast
 
     this.AI = new AI(nastavitve.globina || 10, undefined, new Hevristika(HEVRISTIKA.TOCKOVANJE, sirina, visina, v_vrsto), {visina:this.visina, sirina:this.sirina,
         v_vrsto:this.v_vrsto, na_potezi:this.na_potezi});  // AI je v igri
-    
+
 }
 
 Igra.prototype.najboljsa_poteza = function() {

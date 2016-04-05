@@ -23,7 +23,7 @@ function Igralec(id, ime, barva, clovek) {
 }
 
 // Nastavimo si singeltone igralcev
-IGRALCI = {};
+var IGRALCI = {};
 IGRALCI.IGRALEC_1 = new Igralec(1, "Igralec 1", "modra", true);
 IGRALCI.IGRALEC_2 = new Igralec(2, "Igralec 2", "rdeca", false);
 IGRALCI.NE_ODIGRANO = new Igralec(0, "Narava", "bela", false);
@@ -32,14 +32,14 @@ IGRALCI.DEFUALT = IGRALCI.IGRALEC_1;
 IGRALCI.IGRALCI = [IGRALCI.NE_ODIGRANO, IGRALCI.IGRALEC_1, IGRALCI.IGRALEC_2];
 
 // Singeltoni stanj
-STANJE = {};
+var STANJE = {};
 STANJE.KONCANO = 1;
 STANJE.REMI = 0;
 STANJE.NE_KONCANO = -1;
 STANJE.DEFUALT = STANJE.NE_KONCANO;
 
 // Singeltoni hevristicnih tockovanj
-HEVRISTIKA = {};
+var HEVRISTIKA = {};
 HEVRISTIKA.TOCKOVANJE = {};
 HEVRISTIKA.TOCKOVANJE.ZMAGA = 1000000;
 HEVRISTIKA.TOCKOVANJE.PORAZ = -HEVRISTIKA.TOCKOVANJE.ZMAGA;
@@ -48,10 +48,10 @@ HEVRISTIKA.TOCKOVANJE.REMI = 0;
 HEVRISTIKA.TOCKOVANJE.KAZEN_NA_GLOBINO_MAX = -1;
 HEVRISTIKA.TOCKOVANJE.KAZEN_NA_GLOBINO_MIN = HEVRISTIKA.TOCKOVANJE.KAZEN_NA_GLOBINO_MAX;
 
-NESKONCNO = Math.pow(10, 9);
+var NESKONCNO = Math.pow(10, 9);
 
 // ALi exporatamo glavni objekt igre
-HOCEMO_NAREDITI_IGRO_BOLJ_VARNO = false;
+var HOCEMO_NAREDITI_IGRO_BOLJ_VARNO = false;
 
 
 /**
