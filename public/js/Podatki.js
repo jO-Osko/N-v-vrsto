@@ -50,8 +50,9 @@ HEVRISTIKA.TOCKOVANJE.KAZEN_NA_GLOBINO_MIN = HEVRISTIKA.TOCKOVANJE.KAZEN_NA_GLOB
 
 var NESKONCNO = Math.pow(10, 9);
 
-// ALi exporatamo glavni objekt igre
-var HOCEMO_NAREDITI_IGRO_BOLJ_VARNO = false;
+// Ali exportamo glavni objekt igre
+// V gh-pages ga naceloma ne damo na voljo
+var HOCEMO_NAREDITI_IGRO_BOLJ_VARNO = true;
 
 
 /**
