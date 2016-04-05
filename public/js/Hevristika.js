@@ -199,7 +199,7 @@ Hevristika.prototype.preveri_levo_diagonalo = function(plosca) {
         var druga_meja = this.sirina - 1 - (this.v_vrsto - 1); //zadanemo v spodnji desni  kot
     }
     else{
-        prva_meja = this.sirina - 1 - (this._vrsto - 1); //zadanemo v spodnji desni  kot
+        prva_meja = this.sirina - 1 - (this.v_vrsto - 1); //zadanemo v spodnji desni  kot
         druga_meja = this.visina - 1 - (this.v_vrsto - 1);
         tip_igre = -1;
     }
