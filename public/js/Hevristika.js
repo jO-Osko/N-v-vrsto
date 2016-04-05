@@ -76,10 +76,10 @@ Hevristika.prototype.preveri_vrstice = function(plosca) {
             }
             else{
                 if(plosca[i][vrstica] != trenutni &&  (plosca[i][vrstica] != IGRALCI.NE_ODIGRANO || i == this.sirina - 1)){//zaustavitveni pogoj
-                        if(prejsni == IGRALCI.NE_ODIGRANO  && dolzina_vmes <= 1){
-                            ocene.push(new OcenaHevristika(trenutni, this.v_vrsto - 1));
-                        }
+                    if(prejsni == IGRALCI.NE_ODIGRANO  && dolzina_vmes <= 1){
+                        ocene.push(new OcenaHevristika(trenutni, this.v_vrsto - 1));
                     }
+                    
                     else{
                         //ni dovolj v vrsto
                     }
@@ -257,10 +257,9 @@ Hevristika.prototype.preveri_levo_diagonalo = function(plosca) {
             }
             else{
                 if(plosca[i][vrstica] != trenutni &&  (plosca[i][vrstica] != IGRALCI.NE_ODIGRANO || i == koncni_stolpec)){//zaustavitveni pogoj
-                        if(prejsni == IGRALCI.NE_ODIGRANO && dolzina_vmes <= 1){
-                            ocene.push(new OcenaHevristika(trenutni, this.v_vrsto - 1));
-                        }
-                    }
+                    if(prejsni == IGRALCI.NE_ODIGRANO && dolzina_vmes <= 1){
+                        ocene.push(new OcenaHevristika(trenutni, this.v_vrsto - 1));
+                    }                    
                     else{
                         //ni dovolj v vrsto
                     }
