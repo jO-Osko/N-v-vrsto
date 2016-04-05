@@ -37,8 +37,6 @@ KazalcnaCelica.prototype.skrij_potezo = function () {
     this.html_celica.attr("class", "");
 };
 
-new Igra([[new KazalcnaCelica()]], [], [], [], [], [], []);
-
 /**
  *
  * Osnovni objekt igre, vsebuje vse potrebno za igranje in priakzovanje
