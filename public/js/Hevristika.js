@@ -37,12 +37,13 @@ Hevristika.prototype.tockuj_remi = function() {
 Hevristika.prototype.oceni_plosco = function (plosca, trenutni_igralec) {
     var vrednost = 0;
     var ocene = [];
+    //združimo ocene od diagonal, vrstic in stolpcov
     ocene = ocene.concat(this.preveri_vrstice(plosca), this.preveri_desno_diagonalo(plosca), this.preveri_levo_diagonalo(plosca), this.preveri_navzdol(plosca));
     for(var i = 0; i < ocene.length; i++){
-        if(ocene[i].igralec == trenutni_igralec){
+        if(ocene[i].igralec == trenutni_igralec){//če je ocena od trenutnega igralca prištejemo
             vrednost += ocene[i].dobi_vrednost();
         }
-        else{
+        else{//drugače odštejemo
             vrednost -= ocene[i].dobi_vrednost();
         }
     }
@@ -74,8 +75,7 @@ Hevristika.prototype.preveri_vrstice = function(plosca) {
                 }
             }
             else{
-                if(plosca[i][vrstica] != trenutni &&  (plosca[i][vrstica] != IGRALCI.NE_ODIGRANO || i == this.sirina - 1)){//končamo le če najdemo igralca ki ni trenutni
-                    if(dolzina >=this.v_vrsto - 1){
+                if(plosca[i][vrstica] != trenutni &&  (plosca[i][vrstica] != IGRALCI.NE_ODIGRANO || i == this.sirina - 1)){//zaustavitveni pogoj
                         if(prejsni == IGRALCI.NE_ODIGRANO  && dolzina_vmes <= 1){
                             ocene.push(new OcenaHevristika(trenutni, this.v_vrsto - 1));
                         }
@@ -83,9 +83,10 @@ Hevristika.prototype.preveri_vrstice = function(plosca) {
                     else{
                         //ni dovolj v vrsto
                     }
-                    prejsni = trenutni;
+                    prejsni = trenutni;//na novo nastavimo začetne vrednosti
                     trenutni = plosca[i][vrstica];
                     dolzina = 1;
+                    dolzina_vmes = 0;
                 }
                 else{
                     if(plosca[i][vrstica] == IGRALCI.NE_ODIGRANO){
@@ -109,6 +110,11 @@ Hevristika.prototype.preveri_vrstice = function(plosca) {
 };
 
 Hevristika.prototype.preveri_desno_diagonalo = function(plosca) {
+    //funkcija deluje tako da se sprehodi po število vseh diagonal ki so dolžine vsaj
+    //v_vrsto. Za vsako to diagonalo določi začetni in končni stolpec glede na obliko
+    //mreže(lahko je pokončna ali vodoravna) ter nato preveri za proste v_vrsto - 1 "verige"
+    //na tej diagonali
+    //preverja diagonale ki potekajo desno - dol
     var ocene = [];
     var dolzina_vmes = 0;    
     for(var skupno = this.v_vrsto - 1; skupno < this.sirina + this.visina - this.v_vrsto; skupno++){
@@ -145,7 +151,7 @@ Hevristika.prototype.preveri_desno_diagonalo = function(plosca) {
                 }
             }
             else{
-                if(plosca[i][vrstica] != trenutni &&  (plosca[i][vrstica] != IGRALCI.NE_ODIGRANO || vrstica == koncna_vrstica)){//končamo le če najdemo igralca ki ni trenutni                    
+                if(plosca[i][vrstica] != trenutni &&  (plosca[i][vrstica] != IGRALCI.NE_ODIGRANO || vrstica == koncna_vrstica)){//zaustavitveni pogoj                  
                     if(dolzina >=this.v_vrsto - 1){
                         if(prejsni == IGRALCI.NE_ODIGRANO && dolzina_vmes <= 1){
                             ocene.push(new OcenaHevristika(trenutni, this.v_vrsto - 1));
@@ -154,9 +160,10 @@ Hevristika.prototype.preveri_desno_diagonalo = function(plosca) {
                     else{
                         //ni dovolj v vrsto
                     }
-                    prejsni = trenutni;
+                    prejsni = trenutni;//na novo nastavimo zacetne vrednosti
                     trenutni = plosca[i][vrstica];
                     dolzina = 1;
+                    dolzina_vmes = 0;
                 }
                 else{
                     if(plosca[i][vrstica] == IGRALCI.NE_ODIGRANO){
@@ -182,11 +189,8 @@ Hevristika.prototype.preveri_desno_diagonalo = function(plosca) {
 };
 
 Hevristika.prototype.preveri_levo_diagonalo = function(plosca) {
-    //funkcija deluje tako da se sprehodi po število vseh diagonal ki so dolžine vsaj
-    //v_vrsto. Za vsako to diagonalo določi začetni in končni stolpec glede na obliko
-    //mreže(lahko je pokončna ali vodoravna) ter nato preveri za proste v_vrsto - 1 "verige"
-    //na tej diagonali
-
+    //deluje podobno kot preveri_desno_diagonalo le da preverja diagonale
+    //ki potekajo v smeri levo - gor
     var ocene = [];
     var zacetek = 0;    
     if(this.sirina > this.visina){
@@ -235,7 +239,7 @@ Hevristika.prototype.preveri_levo_diagonalo = function(plosca) {
         var dolzina = 0;
         var dolzina_vmes = 0;
         for(var i = zacetni_stolpec; i <= koncni_stolpec; i++){
-            var vrstica = Math.max(this.visina - this.v_vrsto  - skupno + i, 0); //določimo vrstico glede na trenutni stolpec            
+            var vrstica = Math.max(this.visina - this.v_vrsto  - skupno + i, 0); //dolocimo vrstico glede na trenutni stolpec            
 
             if(trenutni == IGRALCI.NE_ODIGRANO && plosca[i][vrstica] == IGRALCI.NE_ODIGRANO){
                 continue;
@@ -252,8 +256,7 @@ Hevristika.prototype.preveri_levo_diagonalo = function(plosca) {
                 }
             }
             else{
-                if(plosca[i][vrstica] != trenutni &&  (plosca[i][vrstica] != IGRALCI.NE_ODIGRANO || i == koncni_stolpec)){//končamo le če najdemo igralca ki ni trenutni
-                    if(dolzina >=this.v_vrsto - 1){
+                if(plosca[i][vrstica] != trenutni &&  (plosca[i][vrstica] != IGRALCI.NE_ODIGRANO || i == koncni_stolpec)){//zaustavitveni pogoj
                         if(prejsni == IGRALCI.NE_ODIGRANO && dolzina_vmes <= 1){
                             ocene.push(new OcenaHevristika(trenutni, this.v_vrsto - 1));
                         }
@@ -261,9 +264,10 @@ Hevristika.prototype.preveri_levo_diagonalo = function(plosca) {
                     else{
                         //ni dovolj v vrsto
                     }
-                    prejsni = trenutni;
+                    prejsni = trenutni; //na novo nastavimo zacetne vrednosti
                     trenutni = plosca[i][vrstica];
                     dolzina = 1;
+                    dolzina_vmes = 0;
                 }
                 else{
                     if(plosca[i][vrstica] == IGRALCI.NE_ODIGRANO){
@@ -289,6 +293,7 @@ Hevristika.prototype.preveri_levo_diagonalo = function(plosca) {
 };
 
 Hevristika.prototype.preveri_navzdol = function(plosca) {
+    //preveri po stolpcu navzdol za vzorce( v_vrsto - 1 dolge verige)
     var ocene = [];
     for(var stolpec = 0; stolpec < this.sirina; stolpec++){
         var prvi = IGRALCI.NE_ODIGRANO;
