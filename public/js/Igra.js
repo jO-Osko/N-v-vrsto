@@ -1,4 +1,3 @@
-"use strict";
 function IgralnaCelica(html_celica, zacetni_igralec) {
     this.html_celica = html_celica;
     this.igralec = zacetni_igralec;
@@ -38,7 +37,21 @@ KazalcnaCelica.prototype.skrij_potezo = function () {
     this.html_celica.attr("class", "");
 };
 
+new Igra([[new KazalcnaCelica()]], [], [], [], [], [], []);
 
+/**
+ *
+ * Osnovni objekt igre, vsebuje vse potrebno za igranje in priakzovanje
+ *
+ * @param {*[]} html_mreza 2d seznam igralnih celic igre
+ * @param {*[]} kazalci Seznam kazalcnih celic(celice, ki nakazujejo potezo)
+ * @param {Number} visina Visina igralne plosce
+ * @param {Number }sirina Sirina igralne plosce
+ * @param {Number} v_vrsto Stevilo zetonov v vrsto
+ * @param {Object} prikaz_igralca Jquery objekt za priakzovanje trenutnega igralca
+ * @param {Object} nastavitve POD objekt z dodatnimi nastavitvami igre
+ * @constructor
+ */
 function Igra(html_mreza, kazalci, visina, sirina, v_vrsto, prikaz_igralca, nastavitve) {
 
     this.html_mreza = html_mreza;
@@ -298,6 +311,7 @@ Igra.prototype.animiraj_potezo = function(stolpec, vrstica, trenutni_igralec, je
         if(trenutna_vrstica == vrstica){
             if(je_namig){
                 igra.html_mreza[stolpec][trenutna_vrstica].spremeni_barvo(trenutni_igralec); // odigramo zadnjo
+                // Ker je namig na koncu pocistimo za seboj
                 setTimeout(function(){
                     igra.html_mreza[stolpec][trenutna_vrstica].spremeni_barvo(IGRALCI.NE_ODIGRANO);
                 }, time_lapse);

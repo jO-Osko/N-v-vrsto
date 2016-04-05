@@ -1,3 +1,13 @@
+/**
+ *
+ * Osnovni objekt umetne inteligence
+ *
+ * @param {Number} globina globina pregledovanja
+ * @param {*[]} mreza 2d seznam igralcev
+ * @param {Hevristika} hevristika Objekt, ki skrbi za hevristiko
+ * @param {Object} nastavitve Dodatne nastavitve
+ * @constructor
+ */
 function AI(globina, mreza, hevristika, nastavitve) {
     this.globina = globina;
     this.maksimizirani_igralec = null;
@@ -63,7 +73,18 @@ AI.prototype.poteza_nazaj = function () {
     this.aiMreza.poteza_nazaj();
 };
 
-
+/**
+ *
+ * Dodaten objekt za lazje hranjenje mreze
+ *
+ * @param {Number} visina
+ * @param {Number} sirina
+ * @param {*[]} mreza 2d seznam igralcev
+ * @param {Number} v_vrsto
+ * @param {Igralec} na_potezi Trenutni igralec na potezi
+ * @param {[]} poteze Seznam do sedaj opravljenih potez
+ * @constructor
+ */
 function AIMreza(visina, sirina, mreza, v_vrsto, na_potezi, poteze) {
     this.visina = visina;
     this.sirina = sirina;
@@ -218,6 +239,10 @@ AIMreza.prototype.preveri_zmago = function(stolpec, vrstica) {
 
 };
 
+// Posamezne funkcije, ki preverjajo zmago, vsaka v svojo smer
+
+// Kako ljubim te C-jevske for zanke, ki ob primerni uporabi short circuit evalvacijo, ob pravilni uporabi je lahko
+// telo zanke prazno :)
 AIMreza.prototype.preveri_zmago_vertikalno = function(stolpec, vrstica, igralec) {
     // gor-dol
     var sprememba_visine = 1;
